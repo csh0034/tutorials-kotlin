@@ -27,12 +27,18 @@ repositories {
 
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-web")
+  implementation("org.springframework.boot:spring-boot-starter-webflux")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-  implementation("com.google.firebase:firebase-admin:9.2.0")
+  implementation("com.google.firebase:firebase-admin:9.2.0") {
+    exclude(module = "commons-logging")
+  }
   implementation("org.jetbrains.kotlin:kotlin-reflect")
+  implementation("io.netty:netty-resolver-dns-native-macos:4.1.107.Final:osx-aarch_64")
   developmentOnly("org.springframework.boot:spring-boot-devtools")
   kapt("org.springframework.boot:spring-boot-configuration-processor")
-  testImplementation("org.springframework.boot:spring-boot-starter-test")
+  testImplementation("org.springframework.boot:spring-boot-starter-test") {
+    exclude(module = "mockito-core")
+  }
 }
 
 tasks.withType<KotlinCompile> {

@@ -95,4 +95,7 @@ tasks {
       expand(project.properties)
     }
   }
+  jar {
+    enabled = false
+  }
 }

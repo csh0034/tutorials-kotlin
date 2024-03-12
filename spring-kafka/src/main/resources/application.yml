@@ -4,13 +4,14 @@ spring:
     admin:
       auto-create: false
     consumer:
-      group-id: kafka
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       properties:
 #        "[spring.json.trusted.packages]": * # DefaultJackson2JavaTypeMapper, java.util, java.lang 은 기본 포함
-        "[spring.json.use.type.headers]": false
-        "[spring.json.value.default.type]": java.util.LinkedHashMap
-        "[spring.deserializer.value.delegate.class]": org.springframework.kafka.support.serializer.JsonDeserializer
+#        "[spring.json.use.type.headers]": false
+#        "[spring.json.value.default.type]": java.util.LinkedHashMap
+        "[spring.deserializer.value.delegate.class]": org.apache.kafka.common.serialization.StringDeserializer
+      key-deserializer:
+      auto-offset-reset: latest
     producer:
       value-serializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       properties:

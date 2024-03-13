@@ -1,0 +1,7 @@
+# Disable Spring Embedded Kafka logs
+logging:
+  level:
+    "[kafka]": off
+    "[org.apache.kafka]": off
+    "[org.apache.zookeeper]": off
+    "[state.change.logger]": off

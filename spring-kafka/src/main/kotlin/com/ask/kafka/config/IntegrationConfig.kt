@@ -1,5 +1,6 @@
 package com.ask.kafka.config
 
+import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -36,7 +37,7 @@ class IntegrationConfig(
   fun kafkaFlow2(): IntegrationFlow {
     val adapter = Kafka.messageDrivenChannelAdapter(consumerFactory, containerProperties()).configureListenerContainer {
       it.errorHandler(defaultErrorHandler)
-      it.groupId("kafka-sample")
+      it.groupId((consumerFactory.configurationProperties[ConsumerConfig.GROUP_ID_CONFIG] ?: "kafka-sample") as String)
     }
 
     return integrationFlow(adapter) {
@@ -48,7 +49,7 @@ class IntegrationConfig(
   }
 
   private fun containerProperties(): ContainerProperties {
-    val containerProperties = ContainerProperties("chat.websocket")
+    val containerProperties = ContainerProperties("push.websocket")
     containerProperties.clientId = "sample-clientId"
     return containerProperties
   }

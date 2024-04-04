@@ -14,7 +14,7 @@ class User(
 
   @Id
   @UuidGenerator
-  @Column(name = "user_id", length = 50)
+  @Column(length = 50)
   var id: String? = null,
 
   @Column(nullable = false, length = 30)
@@ -43,5 +43,5 @@ class User(
 }
 
 enum class Role {
-  ROLE_USER, ROLE_ADMIN
+  USER, ADMIN
 }

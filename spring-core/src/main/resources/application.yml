@@ -9,6 +9,7 @@ spring:
         show_sql: false
         format_sql: true
     open-in-view: false
+    defer-datasource-initialization: true
 
 core:
   project-version: ${version}

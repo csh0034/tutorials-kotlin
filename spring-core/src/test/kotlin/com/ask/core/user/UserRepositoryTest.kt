@@ -12,7 +12,7 @@ class UserRepositoryTest(
   extensions(SpringExtension)
 
   test("role 을 통해 user 조회") {
-    val result = userRepository.findUsers(Role.ROLE_ADMIN)
+    val result = userRepository.findUsers(Role.ADMIN)
     result shouldHaveSize 0
   }
 })

@@ -12,19 +12,19 @@ class TransactionAspect(
   private val transactionDelegate: TransactionDelegate,
 ) {
   @Around(
-    "execution(* com.ask.*.*.*Service.get*(..)) " +
-      "|| execution(* com.ask.*.*.*Service.find*(..)) " +
-      "|| execution(* com.ask.*.*.*Service.check*(..))"
+    "execution(* com.ask..*Service.get*(..)) " +
+      "|| execution(* com.ask..*Service.find*(..)) " +
+      "|| execution(* com.ask..*Service.check*(..))"
   )
   fun applyReadOnlyTransaction(joinPoint: ProceedingJoinPoint): Any? {
     return transactionDelegate.readOnly(joinPoint)
   }
 
   @Around(
-    "execution(* com.ask.*.*.*Service.*(..)) " +
-      "&& !execution(* com.ask.*.*.*Service.get*(..)) " +
-      "&& !execution(* com.ask.*.*.*Service.find*(..)) " +
-      "&& !execution(* com.ask.*.*.*Service.check*(..))"
+    "execution(* com.ask..*Service.*(..)) " +
+      "&& !execution(* com.ask..*Service.get*(..)) " +
+      "&& !execution(* com.ask..*Service.find*(..)) " +
+      "&& !execution(* com.ask..*Service.check*(..))"
   )
   fun applyReadWriteTransaction(joinPoint: ProceedingJoinPoint): Any? {
     return transactionDelegate.readWrite(joinPoint)

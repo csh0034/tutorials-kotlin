@@ -133,8 +133,6 @@ class FirebaseTest {
         .setToken(TEST_FCM_TOKEN)
         .build()
 
-      Thread.sleep(1000)
-
       val messageId = instance.send(message).also {
         log.info("messageId: $it")
       }
@@ -155,7 +153,7 @@ class FirebaseTest {
         .setAndroidConfig(
           AndroidConfig.builder()
             .setCollapseKey(collapseId)
-            .setTtl(ttl)
+            .setTtl(ttl * 1000)
             .setPriority(AndroidConfig.Priority.HIGH)
             .putData("title", title)
             .putData("body", body)
@@ -166,7 +164,7 @@ class FirebaseTest {
           ApnsConfig.builder()
             .putHeader("apns-collapse-id", collapseId)
             .putHeader("apns-expiration", Instant.now().plusSeconds(ttl).epochSecond.toString())
-            .putHeader("apns-priority", "5")
+            .putHeader("apns-priority", "10")
             .putCustomData("content", contentJson)
             .setAps(
               Aps.builder()
@@ -192,8 +190,6 @@ class FirebaseTest {
         )
         .setToken(TEST_FCM_TOKEN)
         .build()
-
-      Thread.sleep(1000)
 
       val messageId = instance.send(message).also {
         log.info("messageId: $it")

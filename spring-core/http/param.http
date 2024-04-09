@@ -1,0 +1,6 @@
+POST http://localhost:8080/param/instant?time=1693888112921
+Content-Type: application/json
+
+{
+  "time": 1693888112921
+}

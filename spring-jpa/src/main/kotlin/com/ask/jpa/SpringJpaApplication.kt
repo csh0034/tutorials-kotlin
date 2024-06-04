@@ -1,4 +1,4 @@
-package org.ask.jpa
+package com.ask.jpa
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

@@ -29,6 +29,8 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
+  implementation("com.eatthepath:pushy:0.15.4")
+  implementation("io.netty:netty-resolver-dns-native-macos:4.1.110.Final:osx-aarch_64")
   developmentOnly("org.springframework.boot:spring-boot-devtools")
   kapt("org.springframework.boot:spring-boot-configuration-processor")
   testImplementation("org.springframework.boot:spring-boot-starter-test")

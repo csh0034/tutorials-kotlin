@@ -16,6 +16,10 @@ private const val APNS_BUNDLE_ID = ""
 private const val APNS_TOKEN = ""
 
 class ApnsClientTest {
+  init {
+    System.setProperty("java.net.preferIPv4Stack", "true")
+  }
+
   @Test
   fun `voip 메세지 전송`() {
     val apnsClient = ApnsClientBuilder()
@@ -39,17 +43,26 @@ class ApnsClientTest {
       PushType.VOIP
     )
 
-    runCatching {
-      apnsClient.sendNotification(pushNotification).get()
-    }.onSuccess {
-      if (it.isAccepted) {
-        println("Push notification accepted by APNs gateway.")
-      } else {
-        println("Notification rejected by the APNs gateway: ${it.rejectionReason}")
-        it.tokenInvalidationTimestamp.ifPresent { timestamp ->
-          println("\t…and the token is invalid as of $timestamp")
+    apnsClient.sendNotification(pushNotification)
+      .whenComplete { response, cause ->
+        if (response != null) {
+          println("[${Thread.currentThread().name}] $response")
+
+          if (response.isAccepted) {
+            println("Push notification accepted by APNs gateway.")
+          } else {
+            println("Notification rejected by the APNs gateway: ${response.rejectionReason}")
+            response.tokenInvalidationTimestamp.ifPresent { timestamp ->
+              println("the token is invalid as of $timestamp")
+            }
+          }
+        } else {
+          // Something went wrong when trying to send the notification to the
+          // APNs server. Note that this is distinct from a rejection from
+          // the server, and indicates that something went wrong when actually
+          // sending the notification or waiting for a reply.
+          cause.printStackTrace()
         }
-      }
-    }
+      }.get() // 비동기 처리를 위해선 get() 을 호출하지 않으면 된다.
   }
 }

@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: virtual-thread
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: jdbc:mariadb://localhost/tb_virtual?createDatabaseIfNotExist=true
+    username: root
+    password: 111111
+    hikari:
+      maximum-pool-size: 50
+      connection-timeout: 3000
+      connection-test-query: SELECT 1
+
+  jpa:
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+    open-in-view: false
+    defer-datasource-initialization: true

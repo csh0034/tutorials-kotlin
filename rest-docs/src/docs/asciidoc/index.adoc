@@ -18,10 +18,10 @@ rest docs 샘플
 Request HTTP Example:
 include::{snippets}/test-sample/http-request.adoc[]
 
-Header :
+Headers :
 include::{snippets}/test-sample//request-headers.adoc[]
 
-Request Parameters :
+Query Parameters :
 include::{snippets}/test-sample/query-parameters.adoc[]
 
 CURL :

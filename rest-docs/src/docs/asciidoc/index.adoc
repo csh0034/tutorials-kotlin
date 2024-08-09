@@ -1,0 +1,35 @@
+= Spring REST Docs Test
+:doctype: book
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:toc-title: Index
+:seclinks:
+
+[[introduction]]
+= Introduction
+
+rest docs 샘플
+
+== Test Sample
+
+=== A
+==== Request
+Request HTTP Example:
+include::{snippets}/test-sample/http-request.adoc[]
+
+Header :
+include::{snippets}/test-sample//request-headers.adoc[]
+
+Request Parameters :
+include::{snippets}/test-sample/query-parameters.adoc[]
+
+CURL :
+include::{snippets}/test-sample/curl-request.adoc[]
+
+==== Response
+Response HTTP Example:
+include::{snippets}/test-sample/http-response.adoc[]
+
+Response Fields:
+include::{snippets}/test-sample/response-fields.adoc[]

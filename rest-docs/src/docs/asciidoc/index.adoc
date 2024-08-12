@@ -14,22 +14,39 @@ rest docs 샘플
 == Test Sample
 
 === A
+
 ==== Request
+
 Request HTTP Example:
-include::{snippets}/test-sample/http-request.adoc[]
+
+include::{snippets}/rest-docs-test/test/http-request.adoc[]
 
 Headers :
-include::{snippets}/test-sample//request-headers.adoc[]
+
+include::{snippets}/rest-docs-test/test//request-headers.adoc[]
 
 Query Parameters :
-include::{snippets}/test-sample/query-parameters.adoc[]
+
+include::{snippets}/rest-docs-test/test/query-parameters.adoc[]
 
 CURL :
-include::{snippets}/test-sample/curl-request.adoc[]
+
+include::{snippets}/rest-docs-test/test/curl-request.adoc[]
 
 ==== Response
+
 Response HTTP Example:
-include::{snippets}/test-sample/http-response.adoc[]
+
+include::{snippets}/rest-docs-test/test/http-response.adoc[]
 
 Response Fields:
-include::{snippets}/test-sample/response-fields.adoc[]
+
+include::{snippets}/rest-docs-test/test/response-fields.adoc[]
+
+=== B
+
+operation::rest-docs-test/test[]
+
+=== C
+
+operation::rest-docs-test/test[snippets='http-request,request-headers,query-parameters,http-response,response-fields']

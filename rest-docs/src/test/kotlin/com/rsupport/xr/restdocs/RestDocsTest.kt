@@ -25,7 +25,7 @@ import java.util.UUID
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
-class RestDocsApplicationTests(
+class RestDocsTest(
   @Autowired private val mockMvc: MockMvc,
 ) {
   @Test
@@ -39,7 +39,7 @@ class RestDocsApplicationTests(
     }.andDo {
       print()
       document(
-        "test-sample",
+        "{class-name}/{method-name}",
         requestHeaders(
           headerWithName("UUID").description("UUID").optional()
         ),

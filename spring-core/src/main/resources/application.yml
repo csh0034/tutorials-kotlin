@@ -13,7 +13,10 @@ spring:
   jackson:
     deserialization:
       read-date-timestamps-as-nanoseconds: false
-
+  task:
+    scheduling:
+      pool:
+        size: 5
 
 core:
   project-version: ${version}

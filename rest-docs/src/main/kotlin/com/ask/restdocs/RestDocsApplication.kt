@@ -1,4 +1,4 @@
-package com.rsupport.xr.restdocs
+package com.ask.restdocs
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

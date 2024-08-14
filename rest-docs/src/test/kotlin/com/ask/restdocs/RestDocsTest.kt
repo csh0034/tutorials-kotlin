@@ -1,4 +1,4 @@
-package com.rsupport.xr.restdocs
+package com.ask.restdocs
 
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

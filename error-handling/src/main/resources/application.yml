@@ -1,3 +1,11 @@
 spring:
   application:
     name: error-handling
+server:
+  error:
+    whitelabel:
+      enabled: false
+
+logging:
+  level:
+    "[org.apache.catalina.core.ContainerBase]": off

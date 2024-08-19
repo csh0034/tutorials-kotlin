@@ -19,7 +19,7 @@ spring:
 logging:
   level:
     "[com.ask]": debug
-    "[org.mariadb.jdbc]": trace
+    "[org.mariadb.jdbc]": info
     "[org.hibernate.SQL]": debug
     "[org.hibernate.orm.jdbc.bind]": trace
   pattern:

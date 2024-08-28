@@ -6,6 +6,7 @@ import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import org.hibernate.annotations.ColumnDefault
 import org.hibernate.annotations.UuidGenerator
 
 @Entity
@@ -23,6 +24,9 @@ class User(
   @Column(nullable = false, length = 10)
   @Enumerated(EnumType.STRING)
   var role: Role,
+
+  @ColumnDefault("0")
+  var count: Int = 0,
 ) {
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

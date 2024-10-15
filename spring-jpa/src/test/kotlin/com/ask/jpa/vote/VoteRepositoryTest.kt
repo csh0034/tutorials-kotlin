@@ -1,6 +1,7 @@
 package com.ask.jpa.vote
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.repository.findByIdOrNull
 
 @SpringBootTest
@@ -65,5 +67,19 @@ class VoteRepositoryTest {
     val result = voteRepository.deleteByTitle("vote")
     assertThat(result).isOne()
     log.debug("deleteByTitle end")
+  }
+
+  /**
+   * @see <a href="https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html#jpa.modifying-queries">Modifying Queries
+   * </>
+   */
+  @DisplayName("delete jpql 정상 동작하지만 외래키 제약조건 위반 예외 발생")
+  @Test
+  fun deleteAll() {
+    log.debug("deleteAll start")
+    assertThatExceptionOfType(DataIntegrityViolationException::class.java).isThrownBy {
+      voteRepository.deleteAll("vote")
+    }
+    log.debug("deleteAll end")
   }
 }

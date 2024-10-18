@@ -1,5 +1,10 @@
 package com.ask.core.study
 
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -8,68 +13,95 @@ import org.junit.jupiter.api.Test
  * - data object: kotlin 1.9+
  */
 class SealedTest {
+  private val jacksonObjectMapper = jacksonObjectMapper()
+
   @Test
-  fun `RichText Section`() {
-    val element = RichText.Section(
-      listOf(
-        RichText.Text("text1"),
-        RichText.Section(
-          listOf(
-            RichText.Text("text2")
-          )
-        )
-      )
-    )
-    val message = convertToMessage(element)
-    assertThat(message).isEqualTo("Section(element=[Text(text=text1), Section(element=[Text(text=text2)])])")
+  fun `richtext 메세지 파싱`() {
+    val chatMessage = ChatMessage(Container.RICHTEXT, listOf(RichText.Text("text1"), RichText.Section(listOf(RichText.Text("text2")))))
+    val json = jacksonObjectMapper.writeValueAsString(chatMessage)
+    val value = jacksonObjectMapper.readValue<ChatMessage>(json)
+
+    assertThat(json).isEqualTo("""{"type":"richtext","elements":[{"type":"text","text":"text1"},{"type":"section","elements":[{"type":"text","text":"text2"}]}]}""")
+    assertThat(value).isEqualTo(chatMessage)
   }
 
   @Test
-  fun `System Create`() {
-    val element = System.Create("aaa", listOf("bbb", "ccc"))
-    val message = convertToMessage(element)
-    assertThat(message).isEqualTo("Create(inviter=aaa, invitee=[bbb, ccc])")
+  fun `system 메세지 파싱`() {
+    val chatMessage = ChatMessage(Container.SYSTEM, listOf(System.Add(AddData("aaa", listOf("bbb", "ccc")))))
+    val json = jacksonObjectMapper.writeValueAsString(chatMessage)
+    val value = jacksonObjectMapper.readValue<ChatMessage>(json)
+
+    assertThat(json).isEqualTo("""{"type":"system","elements":[{"type":"add","data":{"inviter":"aaa","invitee":["bbb","ccc"]}}]}""")
+    assertThat(value).isEqualTo(chatMessage)
   }
 
   @Test
-  fun `Vote Create`() {
-    val element = Vote.Create
-    val message = convertToMessage(element)
-    assertThat(message).isEqualTo("Create")
-  }
+  fun `vote 메세지 파싱`() {
+    val chatMessage = ChatMessage(Container.VOTE, listOf(Vote.End))
+    val json = jacksonObjectMapper.writeValueAsString(chatMessage)
+    val value = jacksonObjectMapper.readValue<ChatMessage>(json)
 
-  private fun convertToMessage(element: Element) = when (element) {
-    is RichText.Section -> element.toString()
-    is RichText.Text -> element.toString()
-    is System.Create -> element.toString()
-    is System.Add -> element.toString()
-    Vote.Create -> element.toString()
-    Vote.End -> element.toString()
-    Vote.Remind -> element.toString()
+    assertThat(json).isEqualTo("""{"type":"vote","elements":[{"type":"end"}]}""")
+    assertThat(value).isEqualTo(chatMessage)
   }
 }
 
 data class ChatMessage(
   val type: Container,
-  val element: List<Element>,
+  val elements: List<Element>,
 )
 
 enum class Container {
-  RICHTEXT, SYSTEM, VOTE,
+  RICHTEXT, SYSTEM, VOTE;
+
+  @JsonValue
+  private fun lowercase() = this.name.lowercase()
 }
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSubTypes(
+  JsonSubTypes.Type(value = RichText::class),
+  JsonSubTypes.Type(value = System::class),
+  JsonSubTypes.Type(value = Vote::class),
+)
 sealed interface Element
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSubTypes(
+  JsonSubTypes.Type(value = RichText.Section::class, name = "section"),
+  JsonSubTypes.Type(value = RichText.Text::class, name = "text"),
+)
 sealed class RichText : Element {
-  data class Section(val element: List<RichText>) : RichText()
+  data class Section(val elements: List<RichText>) : RichText()
   data class Text(val text: String) : RichText()
 }
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "key")
+@JsonSubTypes(
+  JsonSubTypes.Type(value = System.Create::class, name = "create"),
+  JsonSubTypes.Type(value = System.Add::class, name = "add"),
+)
 sealed class System : Element {
-  data class Create(val inviter: String, val invitee: List<String>) : System()
-  data class Add(val inviter: String, val invitee: List<String>) : System()
+  data class Create(val data: CreateData) : System()
+  data class Add(val data: AddData) : System()
 }
 
+data class CreateData(
+  val inviter: String,
+  val invitee: List<String>,
+)
+
+data class AddData(
+  val inviter: String,
+  val invitee: List<String>,
+)
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "key")
+@JsonSubTypes(
+  JsonSubTypes.Type(value = Vote.Create::class, name = "create"),
+  JsonSubTypes.Type(value = Vote.End::class, name = "end"),
+  JsonSubTypes.Type(value = Vote.Remind::class, name = "remind"),
+)
 sealed class Vote : Element {
   data object Create : Vote()
   data object End : Vote()

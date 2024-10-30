@@ -48,3 +48,14 @@ hibernate.jdbc.batch_size
 - https://mariadb.com/kb/en/about-mariadb-connector-j/
 - https://mariadb.com/docs/server/connect/programming-languages/java/upgrade
 - https://mariadb.com/kb/en/how-to-quickly-insert-data-into-mariadb/#inserting-data-with-insert-statements
+
+## Troubleshooting
+
+## value class Entity Id 사용시 이슈
+
+1. entity Id 에 vale class 사용시 컴파일 시점에 원래 타입이 사용됨.
+2. `ProjectJpaRepository extends JpaRepository<ProjectJpa, ProjectId>` 등과 같이   
+    value class generic 으로 선언시 식별자 불일치가 발생
+3. `ProjectJpaRepository extends JpaRepository<ProjectJpa, String>` 으로 해야함.
+
+- https://github.com/spring-projects/spring-data-jpa/issues/2840

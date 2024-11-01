@@ -87,7 +87,7 @@ PLG Stack 이라고도함
 - k8s 친화적임
 - [DevOps LGTM 스택 도입기](https://medium.com/finda-tech/lgtm-%EC%8A%A4%ED%83%9D-%EB%8F%84%EC%9E%85%EA%B8%B0-aeb1424b8299)
 
-### Logki: 로그 수집
+### Loki: 로그 수집
 ### Grafana: 대시보드 제공
 ### Tempo: 트레이스를 위함
 

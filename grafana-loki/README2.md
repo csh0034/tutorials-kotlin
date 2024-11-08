@@ -44,7 +44,6 @@ services:
     image: grafana/promtail:2.9.2
     volumes:
       - ./config.yml:/etc/promtail/config.yml
-      - ./app.log:/app.log
     command: -config.file=/etc/promtail/config.yml -config.expand-env=true
 ```
 

@@ -12,8 +12,55 @@ spec:
       labels:
         app: demo
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: mode
+                    operator: In
+                    values:
+                      - application
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - demo
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      terminationGracePeriodSeconds: 30 # default 30, 종료 대기시간
       containers:
-      - name: demo
-        image: shchoi1/log-demo:latest
-        ports:
-        - containerPort: 8080
+        - name: demo
+          image: shchoi1/log-demo:latest
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sh", "-c", "sleep 20" ]
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: "/actuator/health/liveness"
+              port: 8080
+            initialDelaySeconds: 30 # default 0, 구동 시간 입력
+            periodSeconds: 5 # default 10, 상태를 확인 주기
+          readinessProbe:
+            httpGet:
+              path: "/actuator/health/readiness"
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1.5Gi"
+            limits:
+              cpu: "1"
+              memory: "1.5Gi"

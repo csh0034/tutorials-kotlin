@@ -17,6 +17,10 @@ spring:
     scheduling:
       pool:
         size: 5
+  http:
+    client:
+      read-timeout: 30s
+      connect-timeout: 3s
 
 core:
   project-version: ${version}

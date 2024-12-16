@@ -1,26 +1,21 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 
 plugins {
-  id("org.springframework.boot") version "3.2.3"
-  id("io.spring.dependency-management") version "1.1.4"
+  id("org.springframework.boot") version "3.4.0"
+  id("io.spring.dependency-management") version "1.1.6"
   id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
-  kotlin("jvm") version "1.9.22"
-  kotlin("plugin.spring") version "1.9.22"
-  kotlin("plugin.jpa") version "1.9.22"
-  kotlin("kapt") version "1.9.22"
+  kotlin("jvm") version "1.9.25"
+  kotlin("plugin.spring") version "1.9.25"
+  kotlin("plugin.jpa") version "1.9.25"
+  kotlin("kapt") version "1.9.25"
 }
 
 group = "com.ask"
 version = "0.0.1-SNAPSHOT"
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_17
-}
-
-configurations {
-  compileOnly {
-    extendsFrom(configurations.annotationProcessor.get())
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
   }
 }
 
@@ -34,6 +29,8 @@ repositories {
   mavenCentral()
 }
 
+val querydslVersion = dependencyManagement.importedProperties["querydsl.version"]
+
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -41,17 +38,17 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   developmentOnly("org.springframework.boot:spring-boot-devtools")
   runtimeOnly("com.h2database:h2")
-  implementation("com.querydsl:querydsl-jpa:${dependencyManagement.importedProperties["querydsl.version"]}:jakarta")
-  implementation("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties["querydsl.version"]}:jakarta")
-  kapt("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties["querydsl.version"]}:jakarta")
+  implementation("com.querydsl:querydsl-jpa:$querydslVersion:jakarta")
+  implementation("com.querydsl:querydsl-apt:$querydslVersion:jakarta")
+  kapt("com.querydsl:querydsl-apt:$querydslVersion:jakarta")
   kapt("org.springframework.boot:spring-boot-configuration-processor")
   testImplementation("org.springframework.boot:spring-boot-starter-test") {
     exclude(module = "mockito-core")
   }
-  testImplementation("com.ninja-squad:springmockk:4.0.0")
-  testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
-  testImplementation("io.kotest:kotest-framework-datatest:5.8.0")
-  testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.3")
+  testImplementation("com.ninja-squad:springmockk:4.0.2")
+  testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
+  testImplementation("io.kotest:kotest-framework-datatest:5.9.1")
+  testImplementation("io.kotest.extensions:kotest-extensions-spring:1.3.0")
 }
 
 springBoot {
@@ -67,13 +64,13 @@ springBoot {
   }
 }
 
-tasks {
-  withType<KotlinCompile> {
-    kotlinOptions {
-      freeCompilerArgs = listOf("-Xjsr305=strict")
-      jvmTarget = "17"
-    }
+kotlin {
+  compilerOptions {
+    freeCompilerArgs.addAll("-Xjsr305=strict")
   }
+}
+
+tasks {
   test {
     useJUnitPlatform()
   }
@@ -84,10 +81,7 @@ tasks {
   withType<Test> {
     testLogging {
       showStandardStreams = true
-      showCauses = true
-      showExceptions = true
-      showStackTraces = true
-      exceptionFormat = TestExceptionFormat.FULL
+      exceptionFormat = FULL
     }
   }
   processResources {

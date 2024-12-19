@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: cloud-aws
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2

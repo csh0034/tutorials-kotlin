@@ -12,3 +12,24 @@
 
 - resource 를 프로토콜에 따라 처리할수 있도록 지원
 - ResourceLoader 에 등록
+
+## oci Buckets, s3 sdk upload
+
+- https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/s3compatibleapi.htm
+
+### 설정 1
+
+- Amazon S3 Compatibility AP I는 경로 스타일 URL만 지원한다. V2(가상 호스팅) 스타일 URL은 지원되지 않는다.
+
+```yaml
+spring:
+  cloud:
+    aws:
+      s3:
+        path-style-access-enabled: true
+```
+
+### 설정 2
+
+- Amazon S3 Compatibility api 에 Compartment 설정
+- https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/designatingcompartments_topic-To_edit_your_tenancys_Amazon_S3_Compatibility_API_and_Swift_API_compartment_designations.htm#top

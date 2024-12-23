@@ -4,4 +4,10 @@ spring:
   cloud:
     aws:
       region:
-        static: ap-northeast-2
+        static: {region}
+      credentials:
+        access-key:
+        secret-key:
+      s3:
+        endpoint: https://{namespace}.compat.objectstorage.{region}.oraclecloud.com
+        path-style-access-enabled: true

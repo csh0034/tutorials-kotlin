@@ -49,3 +49,9 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
   useJUnitPlatform()
 }
+
+tasks.processResources {
+  filesMatching("**/application.yml") {
+    expand(project.properties)
+  }
+}

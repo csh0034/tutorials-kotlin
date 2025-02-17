@@ -43,6 +43,8 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: dev
+            - name: JAVA_TOOL_OPTIONS
+              value: "-Xms2800m -Xmx2800m"
           ports:
             - containerPort: 8080
           livenessProbe:
@@ -59,8 +61,8 @@ spec:
             periodSeconds: 5
           resources:
             requests:
-              cpu: "500m"
-              memory: "1.5Gi"
+              cpu: "2"
+              memory: "4Gi"
             limits:
-              cpu: "1"
-              memory: "1.5Gi"
+              cpu: "2"
+              memory: "4Gi"

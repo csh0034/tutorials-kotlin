@@ -8,7 +8,9 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/healthcheck-path: "/log?level=INFO&message=healthcheck"
     alb.ingress.kubernetes.io/group.name: "demo-alb"
-    alb.ingress.kubernetes.io/group.order: "1"
+    alb.ingress.kubernetes.io/security-groups: sg-123456789
+    alb.ingress.kubernetes.io/manage-backend-security-group-rules: "true"
+    alb.ingress.kubernetes.io/target-group-attributes: load_balancing.algorithm.type=least_outstanding_requests
 spec:
   ingressClassName: alb
   rules:

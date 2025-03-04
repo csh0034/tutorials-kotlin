@@ -4,6 +4,9 @@ import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.assertj.core.api.Assertions.assertThatNoException
 import org.junit.jupiter.api.Test
 
+/**
+ * @see <a href="https://tech.kakaopay.com/post/katfun-joy-kotlin">kakaopay tech blog</>
+ */
 class FixtureTest {
   @Test
   fun `나이가 18세 미만이면 실패한다`() {

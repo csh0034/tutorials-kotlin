@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>캐시 컨트롤 테스트</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<button id="requestBtn">REST API 요청</button>
+<p id="responseText">응답이 여기에 표시됩니다.</p>
+
+<script>
+  $(document).ready(function () {
+    $("#requestBtn").click(function () {
+      $.ajax({
+        url: "/cache",
+        type: "GET",
+        success: function (data, textStatus, xhr) {
+          $("#responseText").text("응답: " + data);
+          console.log("Cache-Control:", xhr.getResponseHeader("Cache-Control"));
+        },
+        error: function () {
+          $("#responseText").text("API 요청 실패");
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

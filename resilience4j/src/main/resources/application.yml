@@ -1,3 +1,33 @@
 spring:
   application:
     name: resilience4j
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+    instances:
+      google:
+        base-config: default
+  ratelimiter:
+    configs:
+      default:
+        register-health-indicator: true
+    instances:
+      google:
+        base-config: default

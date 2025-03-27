@@ -28,6 +28,9 @@ resilience4j:
     configs:
       default:
         register-health-indicator: true
+        limit-for-period: 5
+        limit-refresh-period: 5s
+        timeout-duration: 0s
     instances:
       google:
         base-config: default

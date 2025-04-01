@@ -1,5 +1,13 @@
 # redis
 
+## Redisson
+
+- https://github.com/redisson/redisson
+
+### 분산락 AOP
+
+- [분산락 사용, Kurly Tech Blog](https://helloworld.kurly.com/blog/distributed-redisson-lock/)
+
 ## Troubleshooting
 
 ### lettuce 가 아닌 redisson client 사용시 @DataRedisTest 실패

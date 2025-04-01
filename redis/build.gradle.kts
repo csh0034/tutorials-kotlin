@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-web")
+  implementation("org.springframework.boot:spring-boot-starter-aop")
   implementation("org.springframework.boot:spring-boot-starter-data-redis") { exclude(module = "lettuce-core") }
   implementation("org.redisson:redisson-spring-boot-starter:3.45.1")
   implementation("io.netty:netty-resolver-dns-native-macos:4.1.115.Final:osx-aarch_64")

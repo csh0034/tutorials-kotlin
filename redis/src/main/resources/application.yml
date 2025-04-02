@@ -4,3 +4,8 @@ spring:
   threads:
     virtual:
       enabled: true
+
+logging:
+  level:
+    "[com.ask]": debug
+    "[org.redisson.command.RedisExecutor]": debug

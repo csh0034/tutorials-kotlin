@@ -1,21 +1,19 @@
 package com.ask.core.cache
 
-import com.github.benmanes.caffeine.cache.Caffeine
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
-import java.util.SortedSet
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 
 private const val RANK = "rank"
 
-class CaffeineTest : FunSpec({
+class InMemoryRankingCacheTest : FunSpec({
   context("동작 검증") {
-    lateinit var cache: LocalSortedSetCache<User>
+    lateinit var cache: RankingCache<User>
 
     beforeTest {
-      cache = LocalSortedSetCache()
+      cache = InMemoryRankingCache()
       cache.add(RANK, User(1, "userA"), 100)
       cache.add(RANK, User(2, "userB"), 200)
       cache.add(RANK, User(3, "userC"), 150)
@@ -72,7 +70,7 @@ class CaffeineTest : FunSpec({
   context("동시성 테스트") {
     val value = "userA"
 
-    val cache = LocalSortedSetCache<String>()
+    val cache = InMemoryRankingCache<String>()
     cache.add(RANK, value, 0)
 
     test("스코어 증가") {
@@ -95,97 +93,3 @@ class CaffeineTest : FunSpec({
     }
   }
 })
-
-data class TypedTuple<T : Comparable<T>>(
-  val value: T,
-  val score: Int,
-) : Comparable<TypedTuple<T>> {
-  override fun compareTo(other: TypedTuple<T>) = compareValuesBy(this, other, { it.score }, { it.value })
-}
-
-data class User(
-  val id: Int,
-  val name: String,
-) : Comparable<User> {
-  override fun compareTo(other: User) = compareValuesBy(this, other) { it.id }
-
-  override fun equals(other: Any?): Boolean {
-    if (this === other) return true
-    if (javaClass != other?.javaClass) return false
-
-    other as User
-
-    return id == other.id
-  }
-
-  override fun hashCode(): Int {
-    return id
-  }
-}
-
-class LocalSortedSetCache<V : Comparable<V>> {
-  private val cache = Caffeine.newBuilder()
-    .maximumSize(1000)
-    .build<String, SortedSet<TypedTuple<V>>> { sortedSetOf() }
-
-  fun add(key: String, value: V, score: Int) {
-    val set = cache.get(key)
-    synchronized(set) {
-      set.removeIf { it.value == value }
-      set.add(TypedTuple(value, score))
-    }
-  }
-
-  fun remove(key: String, value: V) {
-    val set = cache.get(key)
-    synchronized(set) {
-      set.removeIf { it.value == value }
-    }
-  }
-
-  fun top(key: String, n: Int): List<V> {
-    val set = cache.get(key)
-    synchronized(set) {
-      return set.take(n).map { it.value }
-    }
-  }
-
-  fun topWithScore(key: String, n: Int): List<TypedTuple<V>> {
-    val set = cache.get(key)
-    synchronized(set) {
-      return set.take(n)
-    }
-  }
-
-  fun topReverse(key: String, n: Int): List<V> {
-    val set = cache.get(key)
-    synchronized(set) {
-      return set.toList().takeLast(n).reversed().map { it.value }
-    }
-  }
-
-  fun rangeByScore(key: String, min: Int, max: Int): List<V> {
-    val set = cache.get(key)
-    synchronized(set) {
-      return set.filter { it.score in min..max }.map { it.value }
-    }
-  }
-
-  fun findByScore(key: String, score: Int): List<V> {
-    val set = cache.get(key)
-    synchronized(set) {
-      return set.filter { it.score == score }.map { it.value }
-    }
-  }
-
-  fun increaseScore(key: String, value: V, delta: Int) {
-    val set = cache.get(key)
-    synchronized(set) {
-      val existing = set.find { it.value == value }
-      if (existing != null) {
-        set.remove(existing)
-        set.add(TypedTuple(value, existing.score + delta))
-      }
-    }
-  }
-}

@@ -100,10 +100,24 @@ to be used in main functions and in tests.
 
 - async 와 다르게 Deferred<T>객체로 반환하지 않고, 결과(T)를 반환
 
+## Java Virtual Thread vs. Kotlin Coroutine
+
+### Java Virtual Thread
+
+- thread per request(spring mvc) 에 적합하고 기존 코드에서 손쉽게 변경 가능
+
+### Kotlin Coroutine
+
+- 높은 동시성을 요구하거나 Event 기반 시스템, 계층구조가 있는작업(Structured Concurrency)을 처리하거나 취소할때 적합
+
+## Structured Concurrency
+
 ## Spring MVC 에서의 코루틴 사용
 
 - thread per request 구조에선 요청을 처리하는 스레드가 블로킹 되므로 응답을 위함이라면 runBlocking + async 를 사용하고  
   단순 비동기라면 CoroutineScope + launch 를 사용하면 된다.
+- 병렬 처리를 위함이라면 코루틴을 사용하는것보다 VT 를 사용하는 확장 함수를 만드는것이 훨씬 간단하다.
+
 
 ## 참조
 

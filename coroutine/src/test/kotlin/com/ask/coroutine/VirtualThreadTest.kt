@@ -2,6 +2,7 @@ package com.ask.coroutine
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
 import kotlin.system.measureTimeMillis
@@ -46,11 +47,12 @@ class VirtualThreadTest {
   @Test
   fun asyncScope() {
     val time = measureTimeMillis {
-      val future1 = AsyncScope().async { Thread.sleep(1000) }
-      val future2 = AsyncScope().async { Thread.sleep(1000) }
+      val countDownLatch = CountDownLatch(2)
 
-      future1.await()
-      future2.await()
+      AsyncScope().async { Thread.sleep(1000); countDownLatch.countDown() }
+      AsyncScope().async { Thread.sleep(1000); countDownLatch.countDown() }
+
+      countDownLatch.await()
     }
 
     assertThat(time).isLessThan(1500)

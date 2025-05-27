@@ -2,6 +2,7 @@ package com.ask.coroutine
 
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
@@ -24,9 +25,7 @@ class CoroutineVirtualThreadTest {
       val job2 = launch(dispatcher) { sleepData() }
       val job3 = launch(dispatcher) { sleepData() }
 
-      job1.join()
-      job2.join()
-      job3.join()
+      joinAll(job1, job2, job3)
     }
 
     println("Elapsed time: ${time}ms")

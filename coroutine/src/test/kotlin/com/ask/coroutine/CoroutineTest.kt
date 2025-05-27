@@ -3,6 +3,7 @@ package com.ask.coroutine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -19,11 +20,9 @@ class CoroutineTest {
       val deferred3 = async(Dispatchers.IO) { delayData() }
 
       // 결과 수집
-      val result1 = deferred1.await()
-      val result2 = deferred2.await()
-      val result3 = deferred3.await()
+      val results = awaitAll(deferred1, deferred2, deferred3)
 
-      println("Results: $result1, $result2, $result3")
+      println("Results: $results")
     }
 
     println("Elapsed time: ${time}ms")
@@ -37,11 +36,9 @@ class CoroutineTest {
       val deferred3 = async { delayData() }
 
       // 결과 수집
-      val result1 = deferred1.await()
-      val result2 = deferred2.await()
-      val result3 = deferred3.await()
+      val results = awaitAll(deferred1, deferred2, deferred3)
 
-      "Results: $result1, $result2, $result3"
+      "Results: $results"
     }
 
     println(test)
@@ -55,11 +52,9 @@ class CoroutineTest {
       val deferred3 = async(Dispatchers.IO) { sleepData() }
 
       // 결과 수집
-      val result1 = deferred1.await()
-      val result2 = deferred2.await()
-      val result3 = deferred3.await()
+      val results = awaitAll(deferred1, deferred2, deferred3)
 
-      println("Results: $result1, $result2, $result3")
+      println("Results: $results")
     }
 
     println("Elapsed time: ${time}ms")
@@ -73,11 +68,9 @@ class CoroutineTest {
       val deferred3 = async { sleepData() }
 
       // 결과 수집
-      val result1 = deferred1.await()
-      val result2 = deferred2.await()
-      val result3 = deferred3.await()
+      val results = awaitAll(deferred1, deferred2, deferred3)
 
-      println("Results: $result1, $result2, $result3")
+      println("Results: $results")
     }
 
     println("Elapsed time: ${time}ms")

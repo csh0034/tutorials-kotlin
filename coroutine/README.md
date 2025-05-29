@@ -24,6 +24,7 @@
 1. 비선점 멀티태스킹
 2. 동시성 프로그래밍 지원
 3. 쉽고 가독성 있는 비동기 처리
+4. Structured Concurrency
 
 ### 코틀린 에서의 코루틴
 
@@ -112,13 +113,24 @@ to be used in main functions and in tests.
 
 ## Structured Concurrency
 
+- 동시성(concurrency) 코드를 구조적으로(structured) 작성하는 방법
+- 코드의 구문 구조(syntactic structure)를 사용해 서로 다른 스레드에서 실행 중인 연관된 작업들을 하나의 작업 단위 (single unit of work) 로  
+  취급하는 방식으로, 이를 통해 오류 처리나 취소를 간소화하고 안정성과 관측성을 높이고자 한다.
+- 기본 원칙
+  - 한 작업이 동시 진행 중인 하위 작업들로 분할되면, 그들 모두 같은 위치(작업의 코드 블록)로 돌아간다
+- 목표
+  - 스레드 누수 및 취소 지연과 같은 위험 제거 및 동시성 코드의 관측성을 높임
+- Java 에서는 JDK21 에 Preview 상태이다 (https://openjdk.org/jeps/453)
+- 코틀린 코루틴의 경우 구조적 동시성을 지원한다
+
 ## Spring MVC 에서의 코루틴 사용
 
 - thread per request 구조에선 요청을 처리하는 스레드가 블로킹 되므로 응답을 위함이라면 runBlocking + async 를 사용하고  
   단순 비동기라면 CoroutineScope + launch 를 사용하면 된다.
-- 병렬 처리를 위함이라면 코루틴을 사용하는것보다 VT 를 사용하는 확장 함수를 만드는것이 훨씬 간단하다.
-
+- 코틀린에서 코루틴을 블로킹콜을 위한 Dispatchers.IO 를 사용하여 병렬 처리를 한다면 코루틴을 사용하는것보다  
+  Java Virtual Thread 를 사용하여 블로킹콜을 효율적으로 처리하는것이 더 효율적이다.
 
 ## 참조
 
 - https://dev.gmarket.com/82
+- https://tech.kakaopay.com/post/coroutine_virtual_thread_wayne/

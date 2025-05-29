@@ -6,7 +6,6 @@ import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,19 +32,20 @@ class UserRepositoryTest {
     userId = user.id!!
   }
 
-  @Disabled
   @Test
   fun `update 시 db 원자적으로 처리하여 동시성 방지 `() {
-    val executor = Executors.newFixedThreadPool(100)
-    val tryCount = 10000
+    val tryCount = 100
+    val executor = Executors.newFixedThreadPool(tryCount)
     val latch = CountDownLatch(tryCount)
 
-    (1..tryCount).forEach { _ ->
-      executor.run {
+    repeat(tryCount) {
+      executor.execute {
         userRepository.updateIncreaseCount(userId)
         latch.countDown()
       }
     }
+
+    latch.await()
 
     val user = userRepository.findByIdOrNull(userId)!!
     assertThat(user.count).isEqualTo(tryCount)

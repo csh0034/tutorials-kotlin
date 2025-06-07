@@ -14,7 +14,6 @@ import org.hibernate.annotations.UuidGenerator
 @Entity
 @Table(name = "mt_user")
 class User(
-
   @Id
   @UuidGenerator
   @Column(length = 50)
@@ -51,7 +50,6 @@ class User(
 enum class Role {
   USER, ADMIN
 }
-
 
 @Embeddable
 data class Name(

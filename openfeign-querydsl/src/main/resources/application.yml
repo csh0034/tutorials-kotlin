@@ -1,3 +1,20 @@
+server:
+  error:
+    whitelabel:
+      enabled: false
+
 spring:
   application:
     name: openfeign-querydsl
+  jpa:
+    properties:
+      "[hibernate.show_sql]": false
+      "[hibernate.format_sql]": true
+    open-in-view: false
+    defer-datasource-initialization: true
+
+logging:
+  level:
+    "[com.ask]": debug
+    "[org.hibernate.SQL]": debug
+    "[org.hibernate.orm.jdbc.bind]": trace

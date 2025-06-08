@@ -9,6 +9,18 @@
 
 `Querydsl maintenance has slowed down to a point where the community has forked the project under OpenFeign at github.com/OpenFeign/querydsl (groupId io.github.openfeign.querydsl). Spring Data supports the fork on a best-effort basis.`
 
+### 관련 Github Issue
+
+- https://github.com/spring-projects/spring-data-jpa/issues/
+- 2024 년 01월 29일, fork 에 대한 지원 계획 없다고함
+- 2025 년 01월 22일, spring data jpa 에서 openfeign fork 를 지원하기로 결정
+
+### CVE-2024-49203
+
+- Querydsl vulnerable to HQL injection trough orderBy
+- openfeign.querydsl 6.10.1 에서 해결됨
+- https://github.com/advisories/GHSA-6q3q-6v5j-h6vg
+
 ## ksp 지원
 
 - https://github.com/OpenFeign/querydsl/releases/tag/6.9

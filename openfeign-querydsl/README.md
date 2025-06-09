@@ -54,6 +54,26 @@ dependencies {
 - Kotlin용 으로 설계된 경량의 어노테이션 프로세싱 도구
 - Kotlin 코드를 Java로 변환하지 않고 직접 처리하므로, Kapt에 비해 컴파일 속도가 빠르다
 
+### KSP `@QueryProjection` 지원
+
+- https://github.com/OpenFeign/querydsl/pull/997
+- 중첩 `@QueryProjection` 대상 사용시 하단과 같이 생성자가 아닌 클래스에 추가해야함
+- 생성자에 추가시 실패함
+
+```kotlin
+@QueryProjection
+data class UserDto(
+  val id: String,
+  val dto: Name,
+)
+
+@QueryProjection
+data class NestedUserDto(
+  val id: String,
+  val dto: UserDto,
+)
+```
+
 ## 현재 미지원 기능
 
 - `@Entity` 에서 value class 사용

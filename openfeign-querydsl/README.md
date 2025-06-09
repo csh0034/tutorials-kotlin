@@ -77,3 +77,4 @@ data class NestedUserDto(
 ## 현재 미지원 기능
 
 - `@Entity` 에서 value class 사용
+- 생성자를 통한 `@QueryProjection` 생성시 body 에 선언된 property 도 포함됨

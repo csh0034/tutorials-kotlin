@@ -9,7 +9,7 @@
 
 `Querydsl maintenance has slowed down to a point where the community has forked the project under OpenFeign at github.com/OpenFeign/querydsl (groupId io.github.openfeign.querydsl). Spring Data supports the fork on a best-effort basis.`
 
-### 관련 Github Issue
+### 관련 GitHub Issue
 
 - https://github.com/spring-projects/spring-data-jpa/issues/
 - 2024 년 01월 29일, fork 에 대한 지원 계획 없다고함
@@ -78,3 +78,5 @@ data class NestedUserDto(
 
 - `@Entity` 에서 value class 사용
 - 생성자를 통한 `@QueryProjection` 생성시 body 에 선언된 property 도 포함됨
+  - querydsl ksp commiter 의 github 에 issue 생성 
+  - https://github.com/IceBlizz6/querydsl-ksp/issues/9

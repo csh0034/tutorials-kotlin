@@ -11,7 +11,7 @@
 
 ### 관련 GitHub Issue
 
-- https://github.com/spring-projects/spring-data-jpa/issues/
+- https://github.com/spring-projects/spring-data-jpa/issues/3335
 - 2024 년 01월 29일, fork 에 대한 지원 계획 없다고함
 - 2025 년 01월 22일, spring data jpa 에서 openfeign fork 를 지원하기로 결정
 

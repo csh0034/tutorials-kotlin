@@ -17,6 +17,7 @@ class ConcurrencyTest {
     Executors.newVirtualThreadPerTaskExecutor().use {
       (1..100).forEach { _ ->
         it.execute {
+          lock.lock()
           try {
             val tmp = count
             Thread.sleep(1)

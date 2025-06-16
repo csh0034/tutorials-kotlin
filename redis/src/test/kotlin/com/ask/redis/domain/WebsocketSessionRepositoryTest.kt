@@ -1,6 +1,8 @@
 package com.ask.redis.domain
 
 import com.ask.redis.config.RedisConfig
+import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration
 import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest
 import org.springframework.context.annotation.Import
+import org.springframework.data.redis.core.PartialUpdate
+import org.springframework.data.redis.core.RedisKeyValueAdapter
 import org.springframework.data.repository.findByIdOrNull
 
 @DataRedisTest
@@ -21,6 +25,9 @@ class WebsocketSessionRepositoryTest {
 
   @Autowired
   lateinit var websocketSessionRepository: WebsocketSessionRepository
+
+  @Autowired
+  lateinit var redisKeyValueAdapter: RedisKeyValueAdapter
 
   @Order(1)
   @Test
@@ -48,9 +55,25 @@ class WebsocketSessionRepositoryTest {
     val session = websocketSessionRepository.findByIdOrNull("session01")!!
     session.server = "websocket3"
     websocketSessionRepository.save(session)
+
+    assertThat(websocketSessionRepository.findByIdOrNull("session01")!!.server).isEqualTo("websocket3")
   }
 
+  /**
+   * @see <a href="https://docs.spring.io/spring-data/redis/reference/redis/redis-repositories/usage.html#redis.repositories.partial-updates">Persisting Partial Updates</a>
+   */
   @Order(5)
+  @Test
+  fun `PartialUpdate 를 활용한 업데이트`() {
+    val update = PartialUpdate("session01", WebsocketSession::class.java)
+      .set("server", "websocket4")
+
+    redisKeyValueAdapter.update(update)
+
+    assertThat(websocketSessionRepository.findByIdOrNull("session01")!!.server).isEqualTo("websocket4")
+  }
+
+  @Order(6)
   @Test
   fun 삭제() {
     websocketSessionRepository.deleteById("session01")

@@ -80,3 +80,21 @@ data class NestedUserDto(
 - 생성자를 통한 `@QueryProjection` 생성시 body 에 선언된 property 도 포함됨
   - querydsl ksp commiter 의 github 에 issue 생성 
   - https://github.com/IceBlizz6/querydsl-ksp/issues/9
+  - https://github.com/OpenFeign/querydsl/pull/1232
+    - 커미터가 반영해줌
+
+## KSP 에 Value class 사용 PR 생성 시도
+
+### 실패 원인 1
+
+- ksp 사용시 코틀린 코드로 생성되므로 value class 로 QClass 를 생성되게 하면 value class 와 기저타입 맵핑간 이슈가 있음
+- value class 를 where 절 조건에 사용할때 값 비교 실패로 예외 발생함
+- spring data Jpa 에서 JpaRepository 사용시에 식별자 제네릭 타입 선언시 기저타입을 사용해야 하는 이슈와 유사함
+  - https://github.com/spring-projects/spring-data-jpa/issues/2840
+
+### 실패 원인 2
+
+- value class 가 프로퍼티에 포함되어 있으면 `DefaultConstructorMarker` 가 생성자에 추가됨  
+  따라서 리플렉션으로 생성자를 통해 `@QueryProjection` 대상 생성 시도할때 생성자를 찾지 못하여 예외 발생함
+- Jackson 의 경우에도 유사한 이슈가 있음
+  - https://github.com/FasterXML/jackson-module-kotlin/issues/651

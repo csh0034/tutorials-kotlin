@@ -1,3 +1,6 @@
 spring:
   application:
     name: jndi
+
+  datasource:
+    jndi-name: jdbc/mydb

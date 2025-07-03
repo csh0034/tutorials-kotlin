@@ -3,6 +3,7 @@ plugins {
   kotlin("plugin.spring") version "1.9.25"
   id("org.springframework.boot") version "3.5.3"
   id("io.spring.dependency-management") version "1.1.7"
+  war
 }
 
 group = "com.ask"
@@ -23,9 +24,10 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-jdbc") {
     exclude(module = "HikariCP")
   }
-  implementation("org.apache.commons:commons-dbcp2")
+  providedCompile("org.apache.commons:commons-dbcp2")
+  providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+  providedRuntime("org.mariadb.jdbc:mariadb-java-client")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-  runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

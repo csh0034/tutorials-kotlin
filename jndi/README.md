@@ -33,11 +33,11 @@
     type="javax.sql.DataSource"
     factory="org.apache.commons.dbcp2.BasicDataSourceFactory"
     driverClassName="org.mariadb.jdbc.Driver"
-    url="jdbc:mysql://localhost:3306/mydb"
-    username="myuser"
-    password="mypassword"
+    url="jdbc:mariadb://localhost:3306/mydb"
+    username="root"
+    password="111111"
     maxTotal="20"
-    maxIdle="10"
+    maxIdle="20"
     maxWaitMillis="10000"/>
 </GlobalNamingResources>
 ```
@@ -56,3 +56,15 @@
 > Tomcat specific resource configuration is entered in the <Context> elements that can be specified in either $CATALINA_BASE/conf/server.xml or, preferably, the per-web-application context XML file (META-INF/context.xml).
 
 - META-INF 하위에 context.xml 을 두고 개별 설정하는걸 권장
+
+
+## Troubleshooting
+
+- factory class 인 BasicDataSourceFactory 에서 `org.apache.commons.logging` 이 필요함
+- spring 에선 apache commons logging 보다 spring-jcl 을 통해 처리하는것을 권장함
+- 따라서 tomcat/lib 에 spring-jcl 도 추가해야함
+
+```text
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.NoClassDefFoundError: org/apache/commons/logging/LogFactory [in thread "main"]
+	at org.apache.commons.dbcp2.BasicDataSourceFactory.<clinit>(BasicDataSourceFactory.java:64)
+```

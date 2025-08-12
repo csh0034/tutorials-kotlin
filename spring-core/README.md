@@ -7,6 +7,27 @@ application.yml 의 logging.level 우선순위가 높다.
 
 spring logback 처리 클래스 DefaultLogbackConfiguration
 
+### logback-spring.xml
+
+- console, file 등에 대해서 미리 선언 되어있으므로 include 만 하면 된다.
+  - spring-boot:version/org.springframework.boot.logging.logback
+    - base.xml (console, file 모두 사용시)
+    - defaults.xml (기본값 선언)
+    - console-appender.xml
+    - file-appender.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="5 seconds">
+  <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+  <property name="LOG_FILE" value="D:\WEB\docimage\logs\docimage.log"/>
+  <property name="LOGBACK_ROLLINGPOLICY_FILE_NAME_PATTERN" value="${LOG_FILE}.%d{yyyy-MM-dd}.%i"/>
+
+  <logger name="com.rsupport" level="debug"/>
+</configuration>
+```
+
 ## Parameter
 
 ### Instant 처리

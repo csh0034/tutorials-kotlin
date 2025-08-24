@@ -16,4 +16,9 @@ class GoogleClientTest {
   fun index() {
     assertThatNoException().isThrownBy { googleClient.index() }
   }
+
+  @Test
+  fun queryObject() {
+    assertThatNoException().isThrownBy { googleClient.queryObject(TestDto(10L, "ask")) }
+  }
 }

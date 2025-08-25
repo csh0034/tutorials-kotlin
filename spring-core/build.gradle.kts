@@ -29,6 +29,13 @@ repositories {
   mavenCentral()
 }
 
+extra["springCloudVersion"] = "2024.0.0"
+dependencyManagement {
+  imports {
+    mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+  }
+}
+
 val querydslVersion = dependencyManagement.importedProperties["querydsl.version"]
 
 dependencies {
@@ -46,6 +53,7 @@ dependencies {
   implementation("com.querydsl:querydsl-apt:$querydslVersion:jakarta")
   kapt("com.querydsl:querydsl-apt:$querydslVersion:jakarta")
   kapt("org.springframework.boot:spring-boot-configuration-processor")
+  implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
   testImplementation("org.springframework.boot:spring-boot-starter-test") {
     exclude(module = "mockito-core")
   }

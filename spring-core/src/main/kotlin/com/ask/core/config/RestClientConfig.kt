@@ -16,6 +16,7 @@ import org.springframework.web.service.invoker.HttpRequestValues
 import org.springframework.web.service.invoker.HttpServiceArgumentResolver
 import org.springframework.web.service.invoker.HttpServiceProxyFactory
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
 @Configuration
@@ -69,15 +70,44 @@ private class QueryMapHttpServiceArgumentResolver : HttpServiceArgumentResolver 
     requireNotNull(argument) { "argument cannot be null" }
 
     for (entry in argument.toMap()) {
-      requestValues.addRequestParameter(entry.key, entry.value)
+      for (value in entry.value) {
+        requestValues.addRequestParameter(entry.key, value)
+      }
     }
 
     return true
   }
 
-  private fun Any.toMap(): Map<String, String?> {
+  private fun Any.toMap(): Map<String, List<String?>> {
     return (this::class as KClass<Any>).memberProperties.associate { prop ->
-      prop.name to prop.get(this)?.toString()
+      prop.name to this.toValue(prop)
     }
+  }
+
+  private fun Any.toValue(prop: KProperty1<Any, *>): List<String?> {
+    val values = mutableListOf<String?>()
+    val value = prop.get(this)
+
+    when (value) {
+      is Iterable<*> -> {
+        val iter = value.iterator()
+        while (iter.hasNext()) {
+          val nextObject = iter.next()
+          values.add(nextObject.toString())
+        }
+      }
+
+      is Array<*> -> {
+        for (item in value) {
+          values.add(item.toString())
+        }
+      }
+
+      else -> {
+        values.add(value.toString())
+      }
+    }
+
+    return values
   }
 }

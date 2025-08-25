@@ -18,7 +18,12 @@ class GoogleClientTest {
   }
 
   @Test
-  fun queryObject() {
-    assertThatNoException().isThrownBy { googleClient.queryObject(TestDto(10L, "ask")) }
+  fun queryMap() {
+    googleClient.queryMap(TestDto(10L, listOf("한글", "&&")))
+  }
+
+  @Test
+  fun queryMap2() {
+    googleClient.queryMap(mapOf("id" to "10", "names" to listOf("한글", "&&")))
   }
 }

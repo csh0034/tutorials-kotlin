@@ -15,7 +15,6 @@ import org.springframework.web.client.support.RestClientAdapter
 import org.springframework.web.service.invoker.HttpRequestValues
 import org.springframework.web.service.invoker.HttpServiceArgumentResolver
 import org.springframework.web.service.invoker.HttpServiceProxyFactory
-import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
@@ -79,35 +78,17 @@ private class QueryMapHttpServiceArgumentResolver : HttpServiceArgumentResolver 
   }
 
   private fun Any.toMap(): Map<String, List<String?>> {
-    return (this::class as KClass<Any>).memberProperties.associate { prop ->
-      prop.name to this.toValue(prop)
+    return this::class.memberProperties.associate { prop ->
+      prop.name to prop.toValues(this)
     }
   }
 
-  private fun Any.toValue(prop: KProperty1<Any, *>): List<String?> {
-    val values = mutableListOf<String?>()
-    val value = prop.get(this)
-
-    when (value) {
-      is Iterable<*> -> {
-        val iter = value.iterator()
-        while (iter.hasNext()) {
-          val nextObject = iter.next()
-          values.add(nextObject.toString())
-        }
-      }
-
-      is Array<*> -> {
-        for (item in value) {
-          values.add(item.toString())
-        }
-      }
-
-      else -> {
-        values.add(value.toString())
-      }
+  private fun KProperty1<out Any, *>.toValues(prop: Any): List<String?> {
+    val value = getter.call(prop) ?: return emptyList()
+    return when (value) {
+      is Iterable<*> -> value.map { it?.toString() }
+      is Array<*> -> value.map { it?.toString() }
+      else -> listOf(value.toString())
     }
-
-    return values
   }
 }

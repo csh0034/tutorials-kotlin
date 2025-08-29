@@ -1,6 +1,18 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
 spring:
   application:
     name: spring-ai
   ai:
     openai:
       api-key: ${openaiApiKey}
+    chat:
+#      client:
+#        observations:
+#          log-prompt: true # user, system 입력한 내용만 보이고 전체 내용은 안보임
+      observations:
+        log-prompt: true

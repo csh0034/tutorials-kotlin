@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor
 import org.springframework.ai.chat.memory.ChatMemory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -38,7 +39,7 @@ class ChatClientTest {
       .build()
 
     val chatClient = chatClientBuilder
-      .defaultAdvisors(advisor)
+      .defaultAdvisors(advisor, SimpleLoggerAdvisor())
       .build()
 
     val userInput = "llm rag 에 대해서 설명해줘"

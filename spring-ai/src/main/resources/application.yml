@@ -17,6 +17,15 @@ spring:
       embedding:
         options:
           model: text-embedding-3-large # default, text-embedding-ada-002
+    vectorstore:
+      chroma:
+        client:
+          host: http://localhost # default
+          port: 8000 # default
+        initialize-schema: false # default
+        tenant-name: SpringAiTenant # default
+        database-name: SpringAiDatabase # default
+        collection-name: SpringAiCollection # default
 
 #    chat:
 #      client:

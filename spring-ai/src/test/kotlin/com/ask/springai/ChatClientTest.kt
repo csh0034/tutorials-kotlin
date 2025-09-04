@@ -1,6 +1,5 @@
 package com.ask.springai
 
-import org.apache.coyote.http11.Constants.a
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient

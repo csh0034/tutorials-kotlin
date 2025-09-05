@@ -14,6 +14,12 @@ class EmbeddingModelTest {
   lateinit var embeddingModel: EmbeddingModel
 
   @Test
+  fun dimensions() {
+    val dimensions = embeddingModel.dimensions()
+    log.info("dimensions: {}", dimensions)
+  }
+
+  @Test
   fun embed() {
     val embed = embeddingModel.embed("King")
     log.info("embed: {}", embed)

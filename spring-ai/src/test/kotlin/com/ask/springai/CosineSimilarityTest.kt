@@ -15,10 +15,15 @@ class CosineSimilarityTest {
   lateinit var embeddingModel: EmbeddingModel
 
   /**
-   * openai
+   * openai, text-embedding-3-large
    * 1. king, 왕 0.547488527592143
    * 2. king, queen 0.5524403169396224
-   * 2. king, emperor 0.4733115273460669
+   * 3. king, emperor 0.4733115273460669
+   *
+   * ollama, mxbai-embed-large
+   * 1. king, 왕 0.6004118918145036
+   * 2. king, queen 0.6937793761351896
+   * 3. king, emperor 0.6646399499797939
    */
   @Test
   fun similaritySearch() {

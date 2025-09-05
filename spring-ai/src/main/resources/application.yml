@@ -8,6 +8,10 @@ spring:
   application:
     name: spring-ai
   ai:
+    model:
+      chat: ollama
+      embedding: ollama
+
     openai:
       api-key: ${openaiApiKey}
       chat:
@@ -17,6 +21,16 @@ spring:
       embedding:
         options:
           model: text-embedding-3-large # default, text-embedding-ada-002
+
+    ollama:
+      base-url: http://10.32.3.155:11434
+      chat:
+        model: qwen2.5-coder:14b # default mistral
+        options:
+          temperature: 0.8 # default
+      embedding:
+        model: mxbai-embed-large # default
+
     vectorstore:
       chroma:
         client:

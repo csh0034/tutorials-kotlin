@@ -14,10 +14,16 @@ class CosineSimilarityTest {
   @Autowired
   lateinit var embeddingModel: EmbeddingModel
 
+  /**
+   * openai
+   * 1. king, 왕 0.547488527592143
+   * 2. king, queen 0.5524403169396224
+   * 2. king, emperor 0.4733115273460669
+   */
   @Test
   fun similaritySearch() {
     val kingVector = embeddingModel.embed("king")
-    val queenVector = embeddingModel.embed("queen")
+    val queenVector = embeddingModel.embed("emperor")
 
     val cosineSimilarity = SimpleVectorStore.EmbeddingMath.cosineSimilarity(kingVector, queenVector)
     log.info("cosineSimilarity: {}", cosineSimilarity)

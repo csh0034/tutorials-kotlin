@@ -21,6 +21,10 @@ resilience4j:
     configs:
       default:
         register-health-indicator: true
+        sliding-window-size: 5
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 3
+
     instances:
       google:
         base-config: default

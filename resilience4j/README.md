@@ -220,6 +220,32 @@ resilience4j:
 }
 ```
 
+## Troubleshooting
+
+### CircuitBreaker interface fallback
+
+- kotlin 의 경우 기본적으로 interface 의 body 가 있는 경우 java 의 default 메서드로 만들지 않으므로 하단옵션 추가해야함 
+
+#### kotlin 1.x
+
+```kotlin
+kotlin {
+  compilerOptions {
+    freeCompilerArgs.addAll("-Xjsr305=strict", "-Xjvm-default=all")
+  }
+}
+```
+
+#### kotlin 2.x
+
+```kotlin
+kotlin {
+    compilerOptions {
+        jvmDefault = JvmDefaultMode.NO_COMPATIBILITY
+    }
+}
+```
+
 ## 참조
 
 - https://resilience4j.readme.io/docs/getting-started

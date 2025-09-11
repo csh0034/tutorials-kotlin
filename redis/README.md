@@ -48,6 +48,14 @@ public static class MyKeyspaceConfiguration extends KeyspaceConfiguration {
 }
 ```
 
+## Redis Sentinel
+
+```shell
+$ redis-cli -p 26379 sentinel get-master-addr-by-name mymaster # 특정 마스터(mymaster)의 현재 마스터 주소(IP + 포트) 를 반환
+$ redis-cli -p 26379 sentinel masters # Sentinel 이 감시하고 있는 모든 마스터 목록 조회
+$ redis-cli -p 26379 sentinel sentinels mymaster # 특정 마스터(mymaster) 를 감시하고 있는 Sentinel 노드들의 정보 조회 
+```
+
 ## Redisson
 
 - https://github.com/redisson/redisson

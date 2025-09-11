@@ -4,6 +4,11 @@ spring:
   threads:
     virtual:
       enabled: true
+  data:
+    redis:
+      sentinel:
+        master: mymaster
+        nodes: localhost:26379,localhost:26380,localhost:26381
 
 logging:
   level:

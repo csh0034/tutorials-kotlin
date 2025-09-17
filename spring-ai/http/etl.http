@@ -1,0 +1,18 @@
+### etl
+POST http://localhost:8080/etl
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file" filename="file.docx
+
+< ../src/test/resources/tax_with_markdown.docx
+
+--WebAppBoundary
+Content-Disposition: form-data; name="source";
+
+tax
+
+--WebAppBoundary--
+
+### delete
+DELETE http://localhost:8080/etl?key=meta&value=meta1

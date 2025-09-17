@@ -7,6 +7,12 @@ management:
 spring:
   application:
     name: spring-ai
+
+  servlet:
+    multipart:
+      max-request-size: -1
+      max-file-size: -1
+
   ai:
     model:
       chat: ollama

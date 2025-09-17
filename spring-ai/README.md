@@ -10,6 +10,30 @@
 
 > Connecting your enterprise Data and APIs with AI Models
 
+## ETL pipeline
+
+- 추출(Extract), 변환(Transform), 적재(Load) 로 이루어진 ETL 프레임워크는 RAG(Retrieval Augmented Generation)  
+  활용 사례에서 데이터 처리의 근간을 이룬다.
+- ETL 파이프라인은 원시 데이터 소스로부터 구조화된 벡터 저장소(Vector Store)로의 흐름을 처리하여, AI 모델이 검색할 수 있도록  
+  데이터가 최적의 형식으로 준비되도록 한다.
+- RAG 활용 사례는 대규모 언어 모델의 생성 능력을 보강하기 위해, 데이터 집합에서 관련 정보를 검색하여 생성된 출력의 품질과  
+  적합성을 향상시키는 것을 목표로 한다.
+
+### DocumentReaders (Extract)
+
+- JSON, Text, Markdown, PDF, DOCX, PPT 등 다양한 형식의 문서를 읽고 파싱한다.
+- 원시 데이터를 Spring AI 파이프라인에서 처리할 수 있는 표준 문서(Document) 구조로 변환한다.
+
+### Transformers (Transform)
+
+- 문서 원본을 분리(Chunking) 하고, 필요시 전처리 및 변환(Preprocessing & Transformation) 을 수행한다.
+- 예: 긴 문서를 작은 단위로 나누기, 불필요한 텍스트 제거, Embedding 변환 준비, metadata 추가하기
+
+### Writers (Load)
+
+- 전처리된 데이터를 VectorStore, 파일 등에 저장한다.
+- 예: 벡터 임베딩을 Milvus, Pinecone, Elasticsearch, Redis 등에 기록.
+
 ## Chat Memory
 
 - 대규모 언어 모델(LLM)은 상태 비저장(stateless) 방식으로, 이전 상호작용에 대한 정보를 유지하지 않는다.

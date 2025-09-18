@@ -16,7 +16,7 @@ spring:
   ai:
     model:
       chat: ollama
-      embedding: ollama
+      embedding: openai
 
     openai:
       api-key: ${openaiApiKey}
@@ -38,6 +38,8 @@ spring:
         model: mxbai-embed-large # default
 
     vectorstore:
+      observations:
+        log-query-response: false # vector store 조회 결과를 출력함
       chroma:
         client:
           host: http://localhost # default
@@ -47,12 +49,12 @@ spring:
         database-name: SpringAiDatabase # default
         collection-name: SpringAiCollection # default
 
-#    chat:
+    chat:
+      observations:
+        log-prompt: true # Chat 모델 프롬프트 전체가 보임
 #      client:
 #        observations:
 #          log-prompt: true # user, system 입력한 내용만 보이고 전체 내용은 안보임
-#      observations:
-#        log-prompt: true # Chat 모델 프롬프트 전체가 보임
 
 logging:
   level:

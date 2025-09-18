@@ -43,7 +43,7 @@ class VectorStoreTest {
   @Test
   fun similaritySearch() {
     val request = SearchRequest.builder()
-      .query("Spring")
+      .query("연봉 5천만원인 직장인의 종합소득세는?")
       .topK(5)
       .build()
 

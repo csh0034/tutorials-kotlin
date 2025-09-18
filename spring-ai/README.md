@@ -77,8 +77,9 @@
 - 전처리된 데이터를 VectorStore, 파일 등에 저장한다.
 - 예: 벡터 임베딩을 Milvus, Pinecone, Elasticsearch, Redis 등에 기록.
 
-## Chat Memory
+## Chat Memory (Multi-turn)
 
+- Multi-turn 이라고 주로 불린다.
 - 대규모 언어 모델(LLM)은 상태 비저장(stateless) 방식으로, 이전 상호작용에 대한 정보를 유지하지 않는다.
 - 이를 해결하기 위해 LLM과의 여러 상호작용에서 정보를 저장하고 검색할 수 있는 채팅 메모리 기능을 제공
 

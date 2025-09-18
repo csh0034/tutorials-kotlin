@@ -1,4 +1,5 @@
 ### etl
+// @connection-timeout 5 m
 POST http://localhost:8080/etl
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
@@ -15,4 +16,4 @@ tax
 --WebAppBoundary--
 
 ### delete
-DELETE http://localhost:8080/etl?key=meta&value=meta1
+DELETE http://localhost:8080/etl?key=source&value=tax

@@ -53,6 +53,51 @@
 - 출처
   - https://aws.amazon.com/ko/what-is/retrieval-augmented-generation/
 
+### RetrievalAugmentationAdvisor
+
+- 하단 의존성 필요
+
+```kotlin
+implementation("org.springframework.ai:spring-ai-rag")
+```
+
+- Spring AI 는 직접 RAG 흐름을 구축할 수 있도록 RAG 모듈 라이브러리를 포함한다.
+- RetrievalAugmentationAdvisor 는 모듈형 아키텍처를 기반으로 가장 일반적인 RAG 흐름에 대해    
+  즉시 사용할 수 있는 구현을 제공하는 Advisor 이다.
+
+### Module
+
+- "Modular RAG: Transforming RAG Systems into LEGO-like Reconfigurable Frameworks" 논문에서 설명한    
+  모듈성 개념을 바탕으로, 모듈형 RAG 아키텍처를 구현한다.
+
+> QueryTransformer를 사용할 때는 ChatClient.Builder를 낮은 temperature 값(예: 0.0)으로 설정하는 것이 권장된다.  
+이렇게 하면 결과가 더 **결정적(deterministic)**이고 정확해져서 검색 품질이 향상된다.  
+대부분의 Chat 모델은 기본 temperature 값이 상대적으로 높게 설정되어 있는데, 이는 Query Transformation 과정에서  
+최적의 검색 성능을 내기에 적합하지 않으며, 검색 효과가 떨어질 수 있다.
+
+#### Pre-Retrieval 
+
+- 유사도 검색 전에 실행하는 모듈
+  - CompressionQueryTransformer: 대화 기억과 관련이 있는 모호한 사용자 질문을 LLM 을 이용하여 완전한 질문으로 변환
+  - RewriteQueryTransformer: 사용자 질문에 검색 결과의 품질에 영향을 줄 수 있는 불필요한 내용을 LLM 을 사용하여 재작성 
+  - TranslationQueryTransformer: 사용자 질문을 LLM 을 이용해서 모델이 지원하는 대상 언어로 번역
+  - MultiQueryExpander: 사용자 질문을 LLM 을 이용하여 다양한 변형 질문으로 확장, 이는 유사도 검색시 사용됨
+
+#### Retrieval
+
+- 유사도 검색시 사용하는 모듈
+  - VectorStoreDocumentRetriever: 입력 쿼리와 의미적으로 유사한 문서를 벡터 저장소에서 검색
+
+#### Post-Retrieval
+
+- 유사도 검색 후에 실행하는 모듈
+
+#### Generation
+
+- LLM 으로 보내기 직전에 실행하는 모듈
+  - ContextualQueryAugmenter: 제공된 문서의 내용을 기반으로 사용자 쿼리에 문맥 데이터를 보강한다.  
+    기본적으로 검색된 컨텍스트가 비어 있는 것을 허용하지 않으며 그런 경우, 모델에게 사용자 쿼리에 답변하지 말라고 지시한다. 
+
 ## ETL pipeline
 
 - 추출(Extract), 변환(Transform), 적재(Load) 로 이루어진 ETL 프레임워크는 RAG(Retrieval Augmented Generation)  

@@ -1,8 +1,9 @@
-package com.ask.springai
+package com.ask.springai.transformer
 
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor
 import org.springframework.ai.chat.messages.AssistantMessage
 import org.springframework.ai.chat.messages.UserMessage
 import org.springframework.ai.rag.Query
@@ -28,7 +29,7 @@ class CompressionQueryTransformerTest {
       .build()
 
     val queryTransformer = CompressionQueryTransformer.builder()
-      .chatClientBuilder(chatClientBuilder)
+      .chatClientBuilder(chatClientBuilder.defaultAdvisors(SimpleLoggerAdvisor()))
       .build()
 
     val transformedQuery = queryTransformer.transform(query)

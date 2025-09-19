@@ -29,6 +29,7 @@ dependencies {
   implementation("org.springframework.ai:spring-ai-starter-model-openai")
   implementation("org.springframework.ai:spring-ai-starter-model-ollama")
   implementation("org.springframework.ai:spring-ai-advisors-vector-store")
+  implementation("org.springframework.ai:spring-ai-rag")
   implementation("org.springframework.ai:spring-ai-starter-vector-store-chroma")
   implementation("org.springframework.ai:spring-ai-tika-document-reader")
   testImplementation("org.springframework.boot:spring-boot-starter-test")

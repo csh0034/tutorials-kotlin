@@ -199,6 +199,12 @@ class CustomerTools {
 
 ![img.png](img/03.png)
 
+### Return Direct
+
+- 도구 실행 생명주기를 관리하는 ToolCallingManager는 도구에 설정된 returnDirect 속성이 true로 설정되어 있으면,   
+  도구 호출 결과는 모델을 거치지 않고 호출자에게 직접 반환된다. 그렇지 않은 경우에는 결과가 모델로 전달된다.
+- RAG 도구에 의존하는 에이전트를 구성하는 경우에는 모델이 후처리를 하지 않고 결과를 그대로 호출자에게 전달하는것이 필요 할 수도 있다.
+
 ### ToolExecutionEligibilityPredicate
 
 - 도구 호출이 실행 가능한지 여부를 결정하는 로직

@@ -141,7 +141,7 @@ implementation("org.springframework.ai:spring-ai-rag")
 > 현재 모델과 도구 실행과 관련해 교환되는 내부 메시지는 사용자에게 노출되지 않는다.  
 > 만약 이러한 메시지에 접근해야 한다면, 사용자 제어형(User-controlled) 도구 실행 방식을 사용해야 한다.
 
-### Tool Calling의 주요 활용
+### Tool Calling 의 주요 활용
 
 #### 1. 정보 검색 (Information Retrieval)
 
@@ -169,6 +169,35 @@ implementation("org.springframework.ai:spring-ai-rag")
 - 모델은 도구(API)에 직접 접근하지 않는다.
 - 일반적으로 도구 호출을 모델 기능으로 언급하지만 실제로 도구 호출 로직을 제공하는 것은  
   클라이언트 응용 프로그램에 달려 있다.
+
+### Tool Calling 동작
+
+![02.png](img/02.png)
+
+1. 모델이 도구를 사용 가능하게 하려면, 채팅 요청에 해당 도구 정의를 포함해야 한다.  
+   각 도구 정의에는 이름, 설명, 입력 파라미터 스키마가 들어간다.
+2. 모델이 도구를 호출하고자 하면, 정의된 스키마에 맞춰 도구 이름과 입력 파라미터를 포함한 응답을 만든다.
+3. 모델은 도구(API)에 직접 접근하지 않는다. 도구 호출 로직을 실제로 수행하는 것은 클라이언트 애플리케이션의 책임이다.  
+   애플리케이션은 도구 이름을 보고 해당 도구를 실행하며, 제공된 입력 파라미터를 사용한다.
+4. 도구 호출 결과는 애플리케이션에서 처리된다.
+5. 애플리케이션은 도구 호출 결과를 모델에 다시 전달한다.
+6. 모델은 전달받은 도구 호출 결과를 참고하여 최종 응답을 생성한다.
+
+### Tool Context
+
+- Spring AI는 ToolContext API를 통해 도구에 추가 컨텍스트 정보를 전달하는 것을 지원한다.
+- 이 기능을 사용하면, AI 모델이 전달한 도구 인수와 함께 도구 실행 시 활용할 수 있는 사용자가 제공한 추가 데이터를 제공할 수 있다.
+
+```kotlin
+class CustomerTools {
+  @Tool(description = "Retrieve customer information")
+  fun getCustomerInfo(id: Long, toolContext: ToolContext ): Customer {
+    return customerRepository.findById(id, toolContext.getContext().get("tenantId"))
+  }
+}
+```
+
+![img.png](img/03.png)
 
 ### ToolExecutionEligibilityPredicate
 

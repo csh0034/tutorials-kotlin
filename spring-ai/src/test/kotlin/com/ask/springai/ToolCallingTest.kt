@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor
+import org.springframework.ai.chat.model.ToolContext
 import org.springframework.ai.tool.annotation.Tool
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -27,6 +28,7 @@ class ToolCallingTest {
       .advisors(SimpleLoggerAdvisor())
       .user(userInput)
       .tools(DateTimeTools())
+      .toolContext(mapOf("id" to "spring-ai"))
       .call()
       .content()
 
@@ -45,8 +47,13 @@ class DateTimeTools {
   }
 
   @Tool(description = "ISO-8601 형식으로 제공되는 주어진 시간 동안 사용자 알람 설정합니다.")
-  fun setAlarm(time: String) {
+  fun setAlarm(time: String, toolContext: ToolContext) {
     val alarmTime = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME)
-    log.info("Alarm set for {}", alarmTime)
+
+    log.info("Alarm set for {}, toolContext id: {}", alarmTime, toolContext.context["id"],)
+
+    toolContext.toolCallHistory.forEach {
+      log.info("toolContext history: {}", it)
+    }
   }
 }

@@ -24,6 +24,7 @@ spring:
         options:
           model: gpt-4o-mini # default
           temperature: 0.0 # default 0.7
+#          internal-tool-execution-enabled: true # default null, true 와 동일하게 동작
       embedding:
         options:
           model: text-embedding-3-large # default, text-embedding-ada-002
@@ -31,9 +32,9 @@ spring:
     ollama:
       base-url: http://10.32.3.155:11434
       chat:
-        model: qwen2.5-coder:14b # default mistral
+        model: gpt-oss:20b # default mistral
         options:
-          temperature: 0.8 # default
+          temperature: 0.0 # default 0.8
       embedding:
         model: mxbai-embed-large # default
 
@@ -59,3 +60,4 @@ spring:
 logging:
   level:
     "[org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor]": debug
+    "[org.springframework.ai.tool]": debug

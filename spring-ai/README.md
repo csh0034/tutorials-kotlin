@@ -133,6 +133,55 @@ implementation("org.springframework.ai:spring-ai-rag")
 - Chat Memory: 대규모 언어 모델이 대화 전반에 걸쳐 **맥락적** 인식을 유지하기 위해 보관하고 사용하는 정보
 - Chat History: 사용자와 모델 간에 교환된 모든 메시지를 포함한 전체 대화 기록입니다.
 
+## Tool Calling
+
+- Function Calling 이라고도 불리며 AI 모델이 자체 지식만으로는 해결할 수 없는 문제를 풀기 위해,  
+  외부의 API, DB, 웹 서비스, 파일 시스템, 액션 실행 등을 호출할 수 있게 해주는 방식
+
+> 현재 모델과 도구 실행과 관련해 교환되는 내부 메시지는 사용자에게 노출되지 않는다.  
+> 만약 이러한 메시지에 접근해야 한다면, 사용자 제어형(User-controlled) 도구 실행 방식을 사용해야 한다.
+
+### Tool Calling의 주요 활용
+
+#### 1. 정보 검색 (Information Retrieval)
+
+- 모델의 지식 한계를 보완하기 위해 외부 데이터를 가져오는 경우
+- 예시:
+  - DB에서 특정 고객 레코드 조회
+  - 웹 검색으로 최신 뉴스 가져오기
+  - 날씨 API 호출해서 현재 기온 확인
+- RAG(검색 기반 생성)에서 많이 사용됨
+- 목표는 모델에 대한 지식을 보강하여 다른 대답에 대답 할 수없는 질문에 대답 할 수 있도록 하는것
+
+#### 2. 액션 실행 (Taking Action)
+
+- 단순히 데이터 검색이 아니라 시스템에 변화를 주는 동작을 실행하는 경우
+- 예시:
+  - 이메일 전송
+  - DB에 새 레코드 생성
+  - 예약/결제 처리
+  - 코드 자동 생성 후 빌드 실행
+- 모델이 "의도"만 전달하면, 실제 실행은 애플리케이션이 담당
+- 목표는 인간의 개입 또는 명시적 프로그래밍이 필요한 작업을 자동화하는 것
+
+### 중요 보안 사항
+
+- 모델은 도구(API)에 직접 접근하지 않는다.
+- 일반적으로 도구 호출을 모델 기능으로 언급하지만 실제로 도구 호출 로직을 제공하는 것은  
+  클라이언트 응용 프로그램에 달려 있다.
+
+### ToolExecutionEligibilityPredicate
+
+- 도구 호출이 실행 가능한지 여부를 결정하는 로직
+- 기본적으로 ToolCallingChatOptions 의 internalToolExecutionEnabled 속성 값에 따라 처리됨 (설정하지 않을 경우 true)
+
+### Troubleshooting
+
+- tool calling 을 지원하지 않는 model 이 있음
+  - qwen2.5-coder 의 경우 코드 생성, 리뷰 등에 최적화된 모델이므로 지원되지 않음
+    - https://github.com/vllm-project/vllm/issues/10952
+    - https://github.com/QwenLM/Qwen3-Coder/issues/180
+
 ## Code & Examples
 
 - https://github.com/spring-ai-community/awesome-spring-ai?tab=readme-ov-file#code--examples

@@ -192,7 +192,7 @@ implementation("org.springframework.ai:spring-ai-rag")
 class CustomerTools {
   @Tool(description = "Retrieve customer information")
   fun getCustomerInfo(id: Long, toolContext: ToolContext ): Customer {
-    return customerRepository.findById(id, toolContext.getContext().get("tenantId"))
+    return customerRepository.findById(id, toolContext.context["tenantId"])
   }
 }
 ```

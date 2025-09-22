@@ -50,7 +50,7 @@ class DateTimeTools {
   fun setAlarm(time: String, toolContext: ToolContext) {
     val alarmTime = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME)
 
-    log.info("Alarm set for {}, toolContext id: {}", alarmTime, toolContext.context["id"],)
+    log.info("Alarm set for {}, toolContext id: {}", alarmTime, toolContext.context["id"])
 
     toolContext.toolCallHistory.forEach {
       log.info("toolContext history: {}", it)

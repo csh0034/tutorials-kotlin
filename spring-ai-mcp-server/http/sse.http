@@ -1,0 +1,72 @@
+### sse 연결
+// @connection-timeout 30 m
+GET http://localhost:8081/sse
+Accept-Charset: UTF-8
+
+### initialize
+POST http://localhost:8081/mcp/message?sessionId=faea4e23-05b2-425c-8d27-c4f50a4844ab
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "method": "initialize",
+  "id": "aa-0",
+  "params": {
+    "protocolVersion": "2024-11-05",
+    "capabilities": {},
+    "clientInfo": {
+      "name": "spring-ai-mcp-client - server1",
+      "version": "1.0.0"
+    }
+  }
+}
+
+### notifications/initialized
+POST http://localhost:8081/mcp/message?sessionId=faea4e23-05b2-425c-8d27-c4f50a4844ab
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/initialized"
+}
+
+### tools/list
+POST http://localhost:8081/mcp/message?sessionId=faea4e23-05b2-425c-8d27-c4f50a4844ab
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "id": "aa-1",
+  "method": "tools/list",
+  "params": {}
+}
+
+### tools/call 1
+POST http://localhost:8081/mcp/message?sessionId=faea4e23-05b2-425c-8d27-c4f50a4844ab
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "id": "467ddab6-2",
+  "params": {
+    "name": "current-date",
+    "arguments": {}
+  }
+}
+
+### tools/call 2
+POST http://localhost:8081/mcp/message?sessionId=faea4e23-05b2-425c-8d27-c4f50a4844ab
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "id": "467ddab6-3",
+  "params": {
+    "name": "set-alarm",
+    "arguments": {
+      "time": "2025-09-23T18:05:24.687875+09:00"
+    }
+  }
+}

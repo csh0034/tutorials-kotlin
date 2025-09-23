@@ -1,3 +1,28 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: spring-ai-mcp-server
+
+  ai:
+    mcp:
+      server:
+        enabled: true # default
+        stdio: false # default
+        name: mcp-server # default
+        version: 1.0.0 # default
+        type: SYNC # default
+        instructions: "This server provides date information tools"
+        sse-endpoint: /sse # default
+        sse-message-endpoint: /mcp/message # default
+        capabilities:
+          tool: true
+          resource: true
+          prompt: true
+          completion: true
+
+logging:
+  level:
+    "[io.modelcontextprotocol]": debug
+    "[org.springframework.ai.tool]": debug

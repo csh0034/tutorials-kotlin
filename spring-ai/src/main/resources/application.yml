@@ -50,12 +50,30 @@ spring:
         database-name: SpringAiDatabase # default
         collection-name: SpringAiCollection # default
 
+    mcp:
+      client: # all default
+        enabled: true
+        name: "spring-ai-mcp-client"
+        version: 1.0.0
+        initialized: true
+        type: sync
+        root-change-notification: true
+        request-timeout: 20s
+        toolcallback:
+          enabled: true
+        sse:
+          connections:
+            date-mcp:
+              url: http://localhost:8081
+              sse-endpoint: /sse
+
 #    chat:
 #      observations:
 #        log-prompt: true # Chat 모델 프롬프트 전체가 보임
 #      client:
 #        observations:
 #          log-prompt: true # user, system 입력한 내용만 보이고 전체 내용은 안보임
+
 
 logging:
   level:

@@ -77,5 +77,4 @@ spring:
 
 logging:
   level:
-    "[org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor]": debug
-    "[org.springframework.ai.tool]": debug
+    "[org.springframework.ai]": debug

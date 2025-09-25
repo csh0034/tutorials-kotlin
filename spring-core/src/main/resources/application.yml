@@ -17,6 +17,12 @@ spring:
     scheduling:
       pool:
         size: 5
+
+    execution:
+      thread-name-prefix: async-
+      pool:
+        core-size: 20
+
   http:
     client:
       read-timeout: 30s

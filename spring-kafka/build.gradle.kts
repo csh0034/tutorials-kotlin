@@ -1,23 +1,19 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  id("org.springframework.boot") version "3.2.3"
-  id("io.spring.dependency-management") version "1.1.4"
-  kotlin("jvm") version "1.9.22"
-  kotlin("plugin.spring") version "1.9.22"
-  kotlin("kapt") version "1.9.22"
+  kotlin("jvm") version "1.9.25"
+  kotlin("plugin.spring") version "1.9.25"
+  kotlin("kapt") version "1.9.25"
+  id("org.springframework.boot") version "3.5.6"
+  id("io.spring.dependency-management") version "1.1.7"
 }
 
 group = "com.ask"
 version = "0.0.1-SNAPSHOT"
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_17
-}
-
-configurations {
-  compileOnly {
-    extendsFrom(configurations.annotationProcessor.get())
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
   }
 }
 
@@ -39,19 +35,22 @@ dependencies {
   testImplementation("org.springframework.kafka:spring-kafka-test")
 }
 
-tasks.withType<KotlinCompile> {
-  kotlinOptions {
-    freeCompilerArgs += "-Xjsr305=strict"
-    jvmTarget = "17"
+kotlin {
+  compilerOptions {
+    freeCompilerArgs.addAll("-Xjsr305=strict")
   }
 }
 
-tasks.withType<Test> {
-  useJUnitPlatform()
-}
-
-tasks.processResources {
-  filesMatching("**/application.yml") {
-    expand(project.properties)
+tasks {
+  test {
+    useJUnitPlatform()
+  }
+  processResources {
+    filesMatching("**/application.yml") {
+      expand(project.properties)
+    }
+  }
+  jar {
+    enabled = false
   }
 }

@@ -5,6 +5,7 @@ import org.apache.kafka.clients.admin.AdminClientConfig
 import org.apache.kafka.clients.admin.ListConsumerGroupsOptions
 import org.apache.kafka.clients.admin.OffsetSpec
 import org.apache.kafka.common.ConsumerGroupState
+import org.apache.kafka.common.TopicPartition
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
@@ -29,6 +30,26 @@ class ConsumerLagTest {
   fun `모든 토픽 조회`() {
     val topicNames = adminClient.listTopics().names().get()
     topicNames.forEach { log.info("topic: {}", it) }
+  }
+
+  @Test
+  fun `특정 토픽 메세지 수 조회`() {
+    val topicName = "demo.topic"
+    val topicDescription = adminClient.describeTopics(listOf(topicName))
+      .allTopicNames()
+      .get()[topicName] ?: throw IllegalArgumentException("topic not found: $topicName")
+
+    val partitions = topicDescription.partitions().map { TopicPartition(topicName, it.partition()) }
+    val earliestOffsets = adminClient.listOffsets(partitions.associateWith { OffsetSpec.earliest() }).all().get()
+    val latestOffsets = adminClient.listOffsets(partitions.associateWith { OffsetSpec.latest() }).all().get()
+
+    val sum = partitions.sumOf {
+      val earliestOffset = earliestOffsets[it]?.offset() ?: 0
+      val latestOffset = latestOffsets[it]?.offset() ?: 0
+      latestOffset - earliestOffset
+    }
+
+    log.info("sum: {}", sum)
   }
 
   @Test

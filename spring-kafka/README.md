@@ -51,3 +51,10 @@
   - RetryTopicConfigurer
     - ListenerContainerFactoryConfigurer.decorate
       - CommonErrorHandler
+
+### Retry Topic
+
+- 3.2 부터는 기본 동작이 동일한 지연 간격에 대해서는 재시도 토픽을 재사용하도록 변경
+  - spring boot 3.5.6 기준 spring kafka 3.3.10
+  - `SameIntervalTopicReuseStrategy.SINGLE_TOPIC`
+- 지수 백오프(exponential backoff)를 사용할 경우, 재시도 토픽은 지연 시간 값이 접미사로 추가된다

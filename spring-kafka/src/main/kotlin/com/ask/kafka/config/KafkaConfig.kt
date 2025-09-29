@@ -8,6 +8,7 @@ import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.annotation.RetryableTopic
 import org.springframework.kafka.listener.DefaultErrorHandler
 import org.springframework.kafka.retrytopic.DltStrategy
+import org.springframework.kafka.retrytopic.SameIntervalTopicReuseStrategy
 import org.springframework.messaging.MessageHeaders
 import org.springframework.messaging.handler.annotation.Headers
 import org.springframework.messaging.handler.annotation.Payload
@@ -25,9 +26,11 @@ class DltHandler {
   private val log = LoggerFactory.getLogger(javaClass)
 
   @RetryableTopic(
-    attempts = "1",
+    attempts = "3",
+    retryTopicSuffix = ".retry",
     dltTopicSuffix = ".dlt",
     dltStrategy = DltStrategy.FAIL_ON_ERROR,
+    sameIntervalTopicReuseStrategy = SameIntervalTopicReuseStrategy.SINGLE_TOPIC // default
   )
   @KafkaListener(topics = ["demo.topic"])
   fun onMessage(

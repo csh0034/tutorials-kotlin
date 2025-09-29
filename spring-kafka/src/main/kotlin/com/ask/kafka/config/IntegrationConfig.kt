@@ -64,21 +64,27 @@ class IntegrationConfig(
     val recoverer = DeadLetterPublishingRecoverer(kafkaTemplate) { _, _ ->
       TopicPartition(KafkaTopic.DLT.topicName, -1)
     }.apply {
-      excludeHeader(*DeadLetterPublishingRecoverer.HeaderNames.HeadersToAdd.entries.toTypedArray())
+      initializeHeader()
+      includeCustomHeader()
       includeHeader(DeadLetterPublishingRecoverer.HeaderNames.HeadersToAdd.GROUP)
       includeHeader(DeadLetterPublishingRecoverer.HeaderNames.HeadersToAdd.TOPIC)
-      setHeadersFunction { _, ex -> setCustomHeader(ex) }
     }
 
     val backOff = FixedBackOff(0, 0)
     return DefaultErrorHandler(recoverer, backOff)
   }
 
-  private fun setCustomHeader(ex: Throwable): RecordHeaders {
-    val rootCause = NestedExceptionUtils.getMostSpecificCause(ex)
-    return RecordHeaders().apply {
-      add("error-class-fqcn", rootCause.javaClass.name.toByteArray())
-      add("error-message", rootCause.message?.toByteArray())
+  private fun DeadLetterPublishingRecoverer.initializeHeader() {
+    excludeHeader(*DeadLetterPublishingRecoverer.HeaderNames.HeadersToAdd.entries.toTypedArray())
+  }
+
+  private fun DeadLetterPublishingRecoverer.includeCustomHeader() {
+    addHeadersFunction { _, ex ->
+      val rootCause = NestedExceptionUtils.getMostSpecificCause(ex)
+      RecordHeaders().apply {
+        add("error-class-fqcn", rootCause.javaClass.name.toByteArray())
+        add("error-message", rootCause.message?.toByteArray())
+      }
     }
   }
 }

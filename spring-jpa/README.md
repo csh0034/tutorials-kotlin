@@ -13,6 +13,12 @@ spring boot 3.3 기준 mariadb client **3.3.3** 사용함
 
 - https://docs.jboss.org/hibernate/orm/6.5/userguide/html_single/Hibernate_User_Guide.html#batch-session-batch-insert
 
+추가, MariaDB Connector/J **3.5.6** 에서 옵션 다시 추가됨
+
+- https://mariadb.com/docs/release-notes/connectors/java/3.5/3.5.6
+- https://jira.mariadb.org/browse/CONJ-1238
+- https://jira.mariadb.org/browse/CONJ-1077
+
 ### hibernate batch 설정 활성화
 
 hibernate.jdbc.batch_size

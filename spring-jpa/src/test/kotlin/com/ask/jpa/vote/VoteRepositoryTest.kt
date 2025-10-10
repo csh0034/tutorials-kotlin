@@ -1,5 +1,7 @@
 package com.ask.jpa.vote
 
+import com.ask.jpa.vote.QVote.vote
+import com.querydsl.jpa.impl.JPAQueryFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.AfterEach
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.transaction.support.TransactionTemplate
 
 @SpringBootTest
 class VoteRepositoryTest {
@@ -18,6 +21,12 @@ class VoteRepositoryTest {
 
   @Autowired
   lateinit var voteRepository: VoteRepository
+
+  @Autowired
+  lateinit var queryFactory: JPAQueryFactory
+
+  @Autowired
+  lateinit var transactionTemplate: TransactionTemplate
 
   lateinit var voteId: String
 
@@ -29,6 +38,11 @@ class VoteRepositoryTest {
     voteRepository.save(vote)
 
     voteId = vote.id!!
+
+    val vote2 = Vote(title = "vote2")
+    vote2.voteItems.add(VoteItem(vote = vote2))
+    vote2.voteItems.add(VoteItem(vote = vote2))
+    voteRepository.save(vote2)
   }
 
   @AfterEach
@@ -81,5 +95,32 @@ class VoteRepositoryTest {
       voteRepository.deleteAll("vote")
     }
     log.debug("deleteAll end")
+  }
+
+  /**
+   * default_batch_fetch_size 만큼 lazy 대상을 한번에 가져온다, 대상이 되지 않는 나머지는 null 로 채워짐
+   */
+  @Test
+  fun default_batch_fetch_size() {
+    log.debug("default_batch_fetch_size start")
+    transactionTemplate.executeWithoutResult {
+      val votes = queryFactory.selectFrom(vote)
+        .fetch()
+
+      votes.forEach { it.voteItems.size }
+    }
+    log.debug("default_batch_fetch_size end")
+  }
+
+  /**
+   * in 절이 2의 제곱단위로 쿼리 생성하므로 a, b, c, c 로 조회됨
+   */
+  @Test
+  fun `query in_clause_parameter_padding`() {
+    log.debug("query.in_clause_parameter_padding start")
+    queryFactory.selectFrom(vote)
+      .where(vote.id.`in`("a", "b", "c"))
+      .fetch()
+    log.debug("query.in_clause_parameter_padding end")
   }
 }

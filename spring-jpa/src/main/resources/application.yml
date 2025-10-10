@@ -8,11 +8,13 @@ spring:
     hibernate:
       ddl-auto: create
     properties:
-      hibernate:
-        jdbc:
-          batch_size: 100
-        show_sql: false
-        format_sql: true
+      "[hibernate.show_sql]": false
+      "[hibernate.format_sql]": true
+      "[hibernate.jdbc.batch_size]": 100
+      "[hibernate.jdbc.order_inserts]": true
+      "[hibernate.jdbc.order_updates]": true
+      "[hibernate.default_batch_fetch_size]": 50
+      "[hibernate.query.in_clause_parameter_padding]": true
     open-in-view: false
     defer-datasource-initialization: true
 

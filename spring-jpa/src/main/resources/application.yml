@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/jpa_test?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/jpa_test?createDatabaseIfNotExist=true&rewriteBatchedStatements=true
     username: root
     password: 111111
 
@@ -11,8 +11,8 @@ spring:
       "[hibernate.show_sql]": false
       "[hibernate.format_sql]": true
       "[hibernate.jdbc.batch_size]": 100
-      "[hibernate.jdbc.order_inserts]": true
-      "[hibernate.jdbc.order_updates]": true
+      "[hibernate.order_inserts]": true
+      "[hibernate.order_updates]": true
       "[hibernate.default_batch_fetch_size]": 50
       "[hibernate.query.in_clause_parameter_padding]": true
     open-in-view: false

@@ -6,10 +6,10 @@
 - 옵션
   - hibernate.jdbc.batch_size
     - Hibernate 가 한 번에 묶어서 실행할 SQL 문장의 최대 개수를 지정, 10 ~ 50 권장
-  - hibernate.jdbc.order_inserts
+  - hibernate.order_inserts
     - Hibernate 가 INSERT 쿼리를 실행할 때, 엔티티 타입별로 정렬해서 실행
     - 단, 정렬 과정이 추가되므로 성능 오버헤드가 발생할 수 있으므로 전후 성능 비교후 적용 권장
-  - hibernate.jdbc.order_updates
+  - hibernate.order_updates
     - Hibernate 가 UPDATE 쿼리를 실행할 때, 엔티티 타입 + 기본키 순서로 정렬해서 실행
     - 같은 엔티티에 대한 UPDATE가 묶이면서 더 많은 배치 실행
     - 동시에 데드락(deadlock) 발생 가능성이 줄어든다

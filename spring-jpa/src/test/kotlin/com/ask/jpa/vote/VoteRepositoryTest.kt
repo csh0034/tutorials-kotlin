@@ -30,19 +30,24 @@ class VoteRepositoryTest {
 
   lateinit var voteId: String
 
+  /**
+   * hibernate.order_inserts true 일때 하나의 트랜잭션 안에 있다면 따로 save 하더라도 batch insert 처리됨
+   */
   @BeforeEach
   fun setUp() {
-    val vote = Vote(title = "vote")
-    vote.voteItems.add(VoteItem(vote = vote))
-    vote.voteItems.add(VoteItem(vote = vote))
-    voteRepository.save(vote)
+    transactionTemplate.executeWithoutResult {
+      val vote = Vote(title = "vote")
+      vote.addVoteItem(VoteItem(vote = vote))
+      vote.addVoteItem(VoteItem(vote = vote))
+      voteRepository.save(vote)
 
-    voteId = vote.id!!
+      val vote2 = Vote(title = "vote2")
+      vote2.addVoteItem(VoteItem(vote = vote2))
+      vote2.addVoteItem(VoteItem(vote = vote2))
+      voteRepository.save(vote2)
 
-    val vote2 = Vote(title = "vote2")
-    vote2.voteItems.add(VoteItem(vote = vote2))
-    vote2.voteItems.add(VoteItem(vote = vote2))
-    voteRepository.save(vote2)
+      voteId = vote.id!!
+    }
   }
 
   @AfterEach

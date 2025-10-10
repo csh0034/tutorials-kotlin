@@ -25,6 +25,10 @@ class Vote(
   @OneToMany(mappedBy = "vote", cascade = [CascadeType.ALL], orphanRemoval = true)
   val voteItems: MutableList<VoteItem> = mutableListOf(),
 ) {
+  fun addVoteItem(voteItem: VoteItem) {
+    voteItems.add(voteItem)
+  }
+
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false

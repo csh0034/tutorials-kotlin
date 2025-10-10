@@ -2,7 +2,7 @@
 
 ## Hibernate Batching
 
-- https://docs.jboss.org/hibernate/orm/7.1/userguide/html_single/Hibernate_User_Guide.html
+- https://docs.jboss.org/hibernate/orm/7.1/userguide/html_single/Hibernate_User_Guide.html#batch
 - 옵션
   - hibernate.jdbc.batch_size
     - Hibernate 가 한 번에 묶어서 실행할 SQL 문장의 최대 개수를 지정, 10 ~ 50 권장

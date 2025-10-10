@@ -1,5 +1,38 @@
 # spring-jpa
 
+## Hibernate Batching
+
+- https://docs.jboss.org/hibernate/orm/7.1/userguide/html_single/Hibernate_User_Guide.html
+- 옵션
+  - hibernate.jdbc.batch_size
+    - Hibernate 가 한 번에 묶어서 실행할 SQL 문장의 최대 개수를 지정, 10 ~ 50 권장
+  - hibernate.jdbc.order_inserts
+    - Hibernate 가 INSERT 쿼리를 실행할 때, 엔티티 타입별로 정렬해서 실행
+    - 단, 정렬 과정이 추가되므로 성능 오버헤드가 발생할 수 있으므로 전후 성능 비교후 적용 권장
+  - hibernate.jdbc.order_updates
+    - Hibernate 가 UPDATE 쿼리를 실행할 때, 엔티티 타입 + 기본키 순서로 정렬해서 실행
+    - 같은 엔티티에 대한 UPDATE가 묶이면서 더 많은 배치 실행
+    - 동시에 데드락(deadlock) 발생 가능성이 줄어든다
+    - 단, 정렬 과정이 추가되므로 성능 오버헤드가 발생할 수 있으므로 전후 성능 비교후 적용 권장
+
+## Query Settings
+
+- https://docs.jboss.org/hibernate/orm/7.1/userguide/html_single/Hibernate_User_Guide.html#settings-query
+- 옵션
+  - hibernate.in_clause_parameter_padding
+      - Where 조건에서 In절의 Padding Cache 사용 유무 (default: false)
+
+## Fetch Related Settings
+
+- https://docs.jboss.org/hibernate/orm/7.1/userguide/html_single/Hibernate_User_Guide.html#settings-fetch
+- 옵션
+  - hibernate.default_batch_fetch_size
+    - Hibernate가 batch fetching의 기본 크기(default value) 를 지정하는 설정  
+      기본적으로는 @BatchSize 어노테이션이 붙은 엔티티나 컬렉션에만 batch fetching이 적용된다  
+      하지만 hibernate.default_batch_fetch_size를 지정하면  
+      명시적 어노테이션이 없어도 기본적으로 batch fetching을 수행한다  
+    - OneToMany Lazy 로딩시에 in 절을 통해 한번에 가져온다
+
 ## MariaDB Batch Insert
 
 ### jdbc 수준에서 batch insert 활성화
@@ -18,13 +51,6 @@ spring boot 3.3 기준 mariadb client **3.3.3** 사용함
 - https://mariadb.com/docs/release-notes/connectors/java/3.5/3.5.6
 - https://jira.mariadb.org/browse/CONJ-1238
 - https://jira.mariadb.org/browse/CONJ-1077
-
-### hibernate batch 설정 활성화
-
-hibernate.jdbc.batch_size
-
-- 드라이버에게 배치 실행을 요청하기 전에 Hibernate 가 함께 배치할 명령문의 최대 수를 제어합니다. 0 또는 음수는 이 기능을 비활성화.
-- [https://docs.jboss.org/hibernate/orm/6.5/userguide/html_single/Hibernate_User_Guide.html#batch-jdbcbatch]
 
 ### Logging
 

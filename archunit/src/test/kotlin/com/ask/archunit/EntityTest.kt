@@ -8,11 +8,11 @@ import com.tngtech.archunit.junit.AnalyzeClasses
 import com.tngtech.archunit.junit.ArchTest
 import com.tngtech.archunit.lang.conditions.ArchConditions.be
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition
-import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.MappedSuperclass
+import jakarta.persistence.Transient
 
 /**
  * fields 로 접근할 경우 superclass 필드는 검사하지 못함
@@ -27,7 +27,7 @@ class EntityTest {
     .that().areDeclaredInClassesThat().areAnnotatedWith(Entity::class.java)
     .or().areDeclaredInClassesThat().areAnnotatedWith(MappedSuperclass::class.java)
     .and().haveRawType(assignableTo(Enum::class.java))
-    .and().areAnnotatedWith(Column::class.java)
+    .and().areNotAnnotatedWith(Transient::class.java)
     .should(be(describe("annotated with @Enumerated(EnumType.STRING)") {
       val annotation = it.tryGetAnnotationOfType(Enumerated::class.java)
       annotation.isPresent && annotation.get().value == EnumType.STRING

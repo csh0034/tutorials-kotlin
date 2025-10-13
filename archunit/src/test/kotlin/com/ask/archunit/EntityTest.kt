@@ -1,18 +1,18 @@
 package com.ask.archunit
 
-import com.tngtech.archunit.core.domain.JavaClass
+import com.tngtech.archunit.base.DescribedPredicate.describe
+import com.tngtech.archunit.core.domain.JavaClass.Predicates.assignableTo
 import com.tngtech.archunit.core.importer.ImportOption
 import com.tngtech.archunit.core.importer.Location
 import com.tngtech.archunit.junit.AnalyzeClasses
 import com.tngtech.archunit.junit.ArchTest
-import com.tngtech.archunit.lang.ArchCondition
-import com.tngtech.archunit.lang.ConditionEvents
-import com.tngtech.archunit.lang.SimpleConditionEvent
+import com.tngtech.archunit.lang.conditions.ArchConditions.be
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
+import jakarta.persistence.MappedSuperclass
 
 /**
  * fields 로 접근할 경우 superclass 필드는 검사하지 못함
@@ -23,26 +23,15 @@ import jakarta.persistence.Enumerated
 )
 class EntityTest {
   @ArchTest
-  val enumFields_should_use_Enumerated_String = ArchRuleDefinition.classes()
-    .that().areAnnotatedWith(Entity::class.java)
-//    .and().containAnyFieldsThat(rawType(assignableTo(Enum::class.java))) // superclass 필드 제외됨
-    .should(haveEnumFieldsWithEnumeratedString())
-
-  private fun haveEnumFieldsWithEnumeratedString(): ArchCondition<JavaClass> {
-    return object : ArchCondition<JavaClass>("have enum fields with @Enumerated(EnumType.STRING)") {
-      override fun check(javaClass: JavaClass, events: ConditionEvents) {
-        javaClass.allFields // allFields 사용해야 superclass 필드도 대상이됨
-          .filter { it.rawType.isEnum && it.isAnnotatedWith(Column::class.java) }
-          .forEach {
-            val enumerated = it.tryGetAnnotationOfType(Enumerated::class.java)
-            if (enumerated.isEmpty || enumerated.get().value != EnumType.STRING) {
-              val message = "[${javaClass.simpleName}.${it.name}] does not have @Enumerated(EnumType.STRING) annotation"
-              events.add(SimpleConditionEvent.violated(it, message))
-            }
-          }
-      }
-    }
-  }
+  val haveEnumFieldsWithEnumeratedString = ArchRuleDefinition.fields()
+    .that().areDeclaredInClassesThat().areAnnotatedWith(Entity::class.java)
+    .or().areDeclaredInClassesThat().areAnnotatedWith(MappedSuperclass::class.java)
+    .and().haveRawType(assignableTo(Enum::class.java))
+    .and().areAnnotatedWith(Column::class.java)
+    .should(be(describe("annotated with @Enumerated(EnumType.STRING)") {
+      val annotation = it.tryGetAnnotationOfType(Enumerated::class.java)
+      annotation.isPresent && annotation.get().value == EnumType.STRING
+    }))
 }
 
 private class DomainImportOption : ImportOption {

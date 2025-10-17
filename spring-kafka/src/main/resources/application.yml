@@ -14,3 +14,11 @@ spring:
         "[spring.deserializer.key.delegate.class]": org.apache.kafka.common.serialization.StringDeserializer
         "[spring.deserializer.value.delegate.class]": org.apache.kafka.common.serialization.StringDeserializer
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

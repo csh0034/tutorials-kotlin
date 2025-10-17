@@ -17,7 +17,7 @@ import org.springframework.kafka.listener.DeadLetterPublishingRecoverer
 import org.springframework.kafka.listener.DefaultErrorHandler
 import org.springframework.util.backoff.FixedBackOff
 
-@Configuration
+//@Configuration
 class IntegrationConfig(
   private val containerFactory: ConcurrentKafkaListenerContainerFactory<Any, Any>,
   private val kafkaTemplate: KafkaOperations<Any, Any>,

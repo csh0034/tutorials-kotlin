@@ -1,6 +1,8 @@
 package com.ask.kafka.config
 
+import org.apache.kafka.clients.admin.AdminClient
 import org.slf4j.LoggerFactory
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.annotation.DltHandler
@@ -19,6 +21,11 @@ import org.springframework.util.backoff.FixedBackOff
 class KafkaConfig {
   @Bean
   fun defaultErrorHandler() = DefaultErrorHandler(FixedBackOff(0, 2))
+
+  @Bean
+  fun adminClient(kafkaProperties: KafkaProperties): AdminClient {
+    return AdminClient.create(kafkaProperties.buildAdminProperties(null))
+  }
 }
 
 //@Component

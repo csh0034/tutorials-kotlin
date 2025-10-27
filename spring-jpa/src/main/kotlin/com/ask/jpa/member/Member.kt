@@ -28,7 +28,9 @@ class Member(
     read = "cast(aes_decrypt(unhex(phone), $SECRET_KEY_PLACEHOLDER) as char)",
     write = "hex(aes_encrypt(?, $SECRET_KEY_PLACEHOLDER))"
   )
-  val phone: String
+  val phone: String,
+
+  val name: String,
 ) {
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

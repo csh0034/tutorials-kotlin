@@ -12,18 +12,17 @@ class MemberRepositoryTest {
   lateinit var memberRepository: MemberRepository
 
   @Test
-  fun `member 생성`() {
-    val member = Member(email = "email@test.com", phone = "010-1234-5678")
-    memberRepository.save(member)
-    memberRepository.flush()
-  }
-
-  @Test
   fun `member 조회`() {
-    val member = Member(email = "email@test.com", phone = "010-1234-5678")
+    val member = Member(email = "email@test.com", phone = "010-1234-5678", name = "Test User2")
     memberRepository.save(member)
 
     val findMember = memberRepository.findByIdOrNull(member.id!!)
     assertThat(findMember).isNotNull
+  }
+
+  @Test
+  fun `custom function 사용`() {
+    val emails = memberRepository.findWithCustomFunction()
+    assertThat(emails).hasSize(0)
   }
 }

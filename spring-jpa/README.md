@@ -121,6 +121,49 @@ class EncryptionStatementInspector : StatementInspector {
 }
 ```
 
+### Integrator 사용
+
+- Contract for extensions that integrate with Hibernate
+- entity metadata 에 접근하여 @ColumnTransformer 를 통해 설정된 customRead, customWrite 를 변경할 수 있음
+
+```kotlin
+@Component
+class EncryptionIntegrator : Integrator {
+  @Value("\${custom.db-secret-key}")
+  private lateinit var secretKey: String
+
+  override fun integrate(
+    metadata: Metadata,
+    bootstrapContext: BootstrapContext,
+    sessionFactory: SessionFactoryImplementor,
+  ) {
+    metadata.entityBindings.forEach { entity ->
+      entity.referenceableProperties.forEach { property ->
+        property.columns.forEach { column ->
+          val customRead = column.customRead
+          val writeExpr = column.customWrite
+
+          if (customRead != null && customRead.contains(SECRET_KEY_PLACEHOLDER)) {
+            column.customRead = customRead.replace(SECRET_KEY_PLACEHOLDER, "'${secretKey}'")
+          }
+
+          if (writeExpr != null && customRead.contains(SECRET_KEY_PLACEHOLDER)) {
+            column.customWrite = writeExpr.replace(SECRET_KEY_PLACEHOLDER, "'${secretKey}'")
+          }
+        }
+      }
+    }
+  }
+
+  override fun disintegrate(
+    sessionFactory: SessionFactoryImplementor,
+    serviceRegistry: SessionFactoryServiceRegistry
+  ) {
+    // no-op
+  }
+}
+```
+
 ### hibernate custom function 사용 가능?
 
 - `@ColumnTransformer` 의 경우 entity 에서 read write 를 통해 바로 db 에 접근하므로 hibernate function 동작 안함

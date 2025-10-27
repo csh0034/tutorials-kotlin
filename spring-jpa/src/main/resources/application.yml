@@ -18,6 +18,9 @@ spring:
     open-in-view: false
     defer-datasource-initialization: true
 
+custom:
+  db-secret-key: secret
+
 logging:
   level:
     "[com.ask]": debug

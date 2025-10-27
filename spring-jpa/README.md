@@ -141,14 +141,13 @@ class EncryptionIntegrator : Integrator {
       entity.referenceableProperties.forEach { property ->
         property.columns.forEach { column ->
           val customRead = column.customRead
-          val writeExpr = column.customWrite
-
           if (customRead != null && customRead.contains(SECRET_KEY_PLACEHOLDER)) {
             column.customRead = customRead.replace(SECRET_KEY_PLACEHOLDER, "'${secretKey}'")
           }
 
-          if (writeExpr != null && customRead.contains(SECRET_KEY_PLACEHOLDER)) {
-            column.customWrite = writeExpr.replace(SECRET_KEY_PLACEHOLDER, "'${secretKey}'")
+          val customWrite = column.customWrite
+          if (customWrite != null && customWrite.contains(SECRET_KEY_PLACEHOLDER)) {
+            column.customWrite = customWrite.replace(SECRET_KEY_PLACEHOLDER, "'${secretKey}'")
           }
         }
       }

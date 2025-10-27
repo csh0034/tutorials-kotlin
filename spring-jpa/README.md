@@ -81,6 +81,50 @@ spring boot 3.3 기준 mariadb client **3.3.3** 사용함
 - https://mariadb.com/docs/server/connect/programming-languages/java/upgrade
 - https://mariadb.com/kb/en/how-to-quickly-insert-data-into-mariadb/#inserting-data-with-insert-statements
 
+## `@ColumnTransformer` 를 통한 컬럼 암복호화
+
+```kotlin
+@Column(nullable = false)
+@ColumnTransformer(
+  read = "cast(aes_decrypt(unhex(email), 'secret') as char)",
+  write = "hex(aes_encrypt(?, 'secret'))"
+)
+val email: String
+```
+
+- 상단 방식의 단점: annotation 에 세팅되어야 하므로 secret key 가 하드코딩 되어야함
+
+### StatementInspector 사용
+
+- JDBC 구문 이 준비되기 전에 세션에서 실행한 각 SQL 명령을 검사하고 처리 가능
+- 해당 인터페이스를 통하여 sql 실행전에 치환
+
+```kotlin
+const val SECRET_KEY_PLACEHOLDER = "__SECRET_KEY__"
+
+@Component
+class EncryptionStatementInspector : StatementInspector {
+  private val log = LoggerFactory.getLogger(javaClass)
+
+  @Value("\${custom.db-secret-key}")
+  private lateinit var secretKey: String
+
+  override fun inspect(sql: String): String {
+    if (sql.contains(SECRET_KEY_PLACEHOLDER)) {
+      return sql.replace(SECRET_KEY_PLACEHOLDER, "'${secretKey}'").also {
+        log.debug("replaced sql: $it")
+      }
+    }
+
+    return sql
+  }
+}
+```
+
+### hibernate custom function 사용 가능?
+
+- `@ColumnTransformer` 의 경우 entity 에서 read write 를 통해 바로 db 에 접근하므로 hibernate function 동작 안함
+
 ## Troubleshooting
 
 ## value class Entity Id 사용시 이슈

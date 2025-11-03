@@ -29,6 +29,10 @@ class FixtureMonkeyTest {
     .plugin(KotlinPlugin())
 //    .plugin(JacksonPlugin(objectMapper))
 //    .plugin(JakartaValidationPlugin())
+    .register(Product::class.java) {
+      it.giveMeKotlinBuilder<Product>()
+        .set(Product::price, 3000)
+    }
     .build()
 
   @Test

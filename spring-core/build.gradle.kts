@@ -61,6 +61,9 @@ dependencies {
   testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
   testImplementation("io.kotest:kotest-framework-datatest:5.9.1")
   testImplementation("io.kotest.extensions:kotest-extensions-spring:1.3.0")
+  testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.1.15")
+  testImplementation("com.navercorp.fixturemonkey:fixture-monkey-datafaker:1.1.15")
+  testImplementation("com.navercorp.fixturemonkey:fixture-monkey-jackson:1.1.15")
 }
 
 springBoot {

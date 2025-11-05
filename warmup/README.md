@@ -162,7 +162,7 @@ openjdk version "21.0.3" 2024-04-16 LTS
 - 적용 방식
   - k8s readinessProbe에 연동
   - entrypoint 스크립트에 연동
-  - ApplicationStartEvent에 연동
+  - ApplicationStartedEvent에 연동
 
 ### 2. cds 적용
 

@@ -2,6 +2,10 @@ spring:
   application:
     name: warmup
 
+  threads:
+    virtual:
+      enabled: true
+
 management:
   endpoints:
     web:
@@ -10,3 +14,10 @@ management:
   endpoint:
     health:
       show-details: always
+      group:
+        readiness:
+          include:
+            - "*"
+        liveness:
+          exclude:
+            - warmup
